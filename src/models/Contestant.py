@@ -19,7 +19,7 @@ class Contestant(db.Model, BaseMixin):
     status = db.Column(db.Enum(StatusEnum), db.ForeignKey('status.name'), nullable=False)
 
     # Relationship
-    account_status = db.relationship("Status")
+    contestant_status = db.relationship("Status")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
