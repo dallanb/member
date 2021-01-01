@@ -1,2 +1,2 @@
-from .Contestant import Contestant
+from .Member import Member
 from .Status import Status

@@ -4,8 +4,8 @@
 
 pip install -e .
 
-if [ "$DATABASE" = "contestant" ]; then
-  echo "Waiting for contestant..."
+if [ "$DATABASE" = "member" ]; then
+  echo "Waiting for member..."
 
   while ! nc -z $SQL_HOST $SQL_PORT; do
     sleep 0.1

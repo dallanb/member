@@ -6,7 +6,7 @@ from .. import db
 from ..common import StatusEnum
 
 
-class Contestant(db.Model, BaseMixin):
+class Member(db.Model, BaseMixin):
     membership_uuid = db.Column(UUIDType(binary=False), primary_key=True, nullable=False)
     email = db.Column(EmailType, unique=True, nullable=False)
     username = db.Column(db.String(15), unique=True, nullable=False)
@@ -19,10 +19,10 @@ class Contestant(db.Model, BaseMixin):
     status = db.Column(db.Enum(StatusEnum), db.ForeignKey('status.name'), nullable=False)
 
     # Relationship
-    contestant_status = db.relationship("Status")
+    member_status = db.relationship("Status")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-Contestant.register()
+Member.register()

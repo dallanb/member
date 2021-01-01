@@ -9,8 +9,8 @@ services:
       - 8080:8080
     networks:
       - app-net
-  contestant:
-    container_name: contestant
+  member:
+    container_name: member
     build:
       context: .
       dockerfile: ./build/Dockerfile
@@ -25,28 +25,28 @@ services:
       - ./manage.py:/home/app/manage.py
       - ./setup.py:/home/app/setup.py
     env_file:
-      - ${HUNCHO_DIR}/env/dev/.env.contestant
+      - ${HUNCHO_DIR}/env/dev/.env.member
       - ${HUNCHO_DIR}/secrets/s3/credentials.txt
     healthcheck:
-      test: curl --fail -s contestant:5000/ping || exit 1
+      test: curl --fail -s member:5000/ping || exit 1
       interval: 60s
       timeout: 5s
       retries: 5
     ports:
       - 20009:5000
     depends_on:
-      - contestant_db
+      - member_db
     networks:
       - app-net
-  contestant_db:
-    container_name: contestant_db
+  member_db:
+    container_name: member_db
     image: postgres:9.6
     volumes:
-      - ${HUNCHO_DIR}/data/dev/contestant_db/data:/var/lib/postgresql/data/
+      - ${HUNCHO_DIR}/data/dev/member_db/data:/var/lib/postgresql/data/
     env_file:
-      - ${HUNCHO_DIR}/env/dev/.env.contestant_db
+      - ${HUNCHO_DIR}/env/dev/.env.member_db
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U contestant" ]
+      test: [ "CMD-SHELL", "pg_isready -U member" ]
       interval: 10s
       timeout: 5s
       retries: 20
