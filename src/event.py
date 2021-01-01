@@ -1,3 +1,5 @@
+import logging
+
 from .events import *
 
 
@@ -6,4 +8,7 @@ def new_event_listener(event):
     key = event.key
     data = event.value
     if topic == 'accounts':
-        Account().handle_event(key=key, data=data)
+        try:
+            Account().handle_event(key=key, data=data)
+        except Exception:
+            logging.error('Account event err')

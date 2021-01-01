@@ -11,6 +11,6 @@ class Account:
     def handle_event(self, key, data):
         if key == 'account_created':
             self.logger.info('account created')
-            _ = self.member_service.create(membership_uuid=data['uuid'], username=data['username'],
+            _ = self.member_service.create(user_uuid=data['user_uuid'], username=data['username'],
                                            email=data['email'], display_name=data['display_name'], status='active')
 
