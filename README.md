@@ -1,2 +1,2 @@
-# contestant
-CONTESTANT Microservice
+# member
+MEMBER Microservice
