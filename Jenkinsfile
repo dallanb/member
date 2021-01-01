@@ -1,8 +1,8 @@
 pipeline {
     environment {
         githubCredential = 'github'
-        container = 'contestant'
-        registry = "dallanbhatti/contestant"
+        container = 'member'
+        registry = "dallanbhatti/member"
         registryCredential = 'dockerhub'
     }
     agent any
