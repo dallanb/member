@@ -83,3 +83,30 @@ class MembersListAPI(Base):
                 )
             }
         )
+
+
+class MembersListBulkAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.member = MemberService()
+
+    @marshal_with(DataResponse.marshallable())
+    def post(self):
+        data = self.clean(schema=bulk_schema, instance={**request.get_json(), **request.args.to_dict()})
+        members = self.member.find(**data)
+        return DataResponse(
+            data={
+                '_metadata': self.prepare_metadata(
+                    total_count=members.total,
+                    page_count=len(members.items),
+                    page=data['page'],
+                    per_page=data['per_page']),
+                'members': self.dump(
+                    schema=dump_many_schema,
+                    instance=members.items,
+                    params={
+                        'include': data['include']
+                    }
+                )
+            }
+        )

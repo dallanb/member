@@ -1,4 +1,4 @@
-from marshmallow import Schema, post_dump
+from marshmallow import Schema, post_dump, post_load
 from marshmallow_enum import EnumField
 from webargs import fields
 
@@ -58,9 +58,26 @@ class FetchAllMemberSchema(Schema):
     league_uuid = fields.UUID(required=False, missing=None)
 
 
+class _BulkMemberWithinSchema(Schema):
+    key = fields.String(required=True)
+    value = fields.List(fields.String(), required=True)
+
+    @post_load
+    def clean_within(self, in_data, **kwargs):
+        return {in_data['key']: in_data['value']}
+
+
+class BulkMemberSchema(Schema):
+    page = fields.Int(required=False, missing=1)
+    per_page = fields.Int(required=False, missing=10)
+    within = fields.Nested(_BulkMemberWithinSchema)
+    include = fields.DelimitedList(fields.String(), required=False, missing=[])
+
+
 create_schema = CreateMemberSchema()
 dump_schema = DumpMemberSchema()
 dump_many_schema = DumpMemberSchema(many=True)
 update_schema = UpdateMemberSchema()
 fetch_schema = FetchMemberSchema()
 fetch_all_schema = FetchAllMemberSchema()
+bulk_schema = BulkMemberSchema()
