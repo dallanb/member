@@ -9,6 +9,9 @@ from ....common import StatusEnum
 class CreateMemberSchema(Schema):
     user_uuid = fields.UUID()
     league_uuid = fields.UUID(missing=None)
+    email = fields.String()
+    username = fields.String()
+    display_name = fields.String()
 
 
 class DumpMemberSchema(Schema):
