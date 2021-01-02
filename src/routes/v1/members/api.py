@@ -3,6 +3,7 @@ from flask_restful import marshal_with
 
 from .schema import *
 from ..base import Base
+from ....common.auth import assign_user
 from ....common.response import DataResponse
 from ....services import MemberService
 
@@ -50,9 +51,11 @@ class MembersUserAPI(Base):
         self.member = MemberService()
 
     @marshal_with(DataResponse.marshallable())
+    @assign_user
     def get(self, user_uuid):
-        data = self.clean(schema=fetch_member_user_schema, instance=request.args)
-        members = self.member.find(user_uuid=user_uuid, **data)
+        data = self.clean(schema=fetch_schema, instance={**request.args,
+                                                         'user_uuid': user_uuid})  # not cleaning user_uuid at base request level so make sure it is cleaned here
+        members = self.member.find(**data)
         if not members.total:
             self.throw_error(http_code=self.code.NOT_FOUND)
         return DataResponse(
