@@ -44,6 +44,30 @@ class MembersAPI(Base):
         )
 
 
+class MembersUserAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.member = MemberService()
+
+    @marshal_with(DataResponse.marshallable())
+    def get(self, user_uuid):
+        data = self.clean(schema=fetch_member_user_schema, instance=request.args)
+        members = self.member.find(user_uuid=user_uuid, **data)
+        if not members.total:
+            self.throw_error(http_code=self.code.NOT_FOUND)
+        return DataResponse(
+            data={
+                'members': self.dump(
+                    schema=dump_schema,
+                    instance=members.items[0],
+                    params={
+                        'include': data['include']
+                    }
+                )
+            }
+        )
+
+
 class MembersListAPI(Base):
     def __init__(self):
         Base.__init__(self)
