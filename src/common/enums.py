@@ -2,5 +2,6 @@ import enum
 
 
 class StatusEnum(enum.Enum):
-    active = 1
-    inactive = 2
+    pending = 1
+    active = 2
+    inactive = 3

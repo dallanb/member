@@ -40,6 +40,8 @@ import sqlalchemy_utils
 import sqlalchemy_utils
 import sqlalchemy_utils
 import sqlalchemy_utils
+import sqlalchemy_utils
+import sqlalchemy_utils
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.
