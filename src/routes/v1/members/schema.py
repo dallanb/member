@@ -6,10 +6,6 @@ from ..avatars.schema import DumpAvatarSchema
 from ....common import StatusEnum
 
 
-
-
-
-
 class CreateMemberSchema(Schema):
     user_uuid = fields.UUID()
     league_uuid = fields.UUID(missing=None)
@@ -21,6 +17,9 @@ class DumpMemberSchema(Schema):
     mtime = fields.Integer()
     user_uuid = fields.UUID()
     league_uuid = fields.UUID(missing=None)
+    email = fields.String()
+    username = fields.String()
+    display_name = fields.String()
     status = EnumField(StatusEnum)
     avatar = fields.Nested(DumpAvatarSchema)
 
