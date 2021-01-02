@@ -13,4 +13,4 @@ class League:
             self.logger.info('member created')
             _ = self.member_service.create(user_uuid=data['user_uuid'], username=data['username'],
                                            email=data['email'], display_name=data['display_name'],
-                                           league_uuid=data['league_uuid'], status='pending')
+                                           league_uuid=data['league_uuid'], country=data['country'], status='pending')

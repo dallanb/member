@@ -6,14 +6,6 @@ from ..avatars.schema import DumpAvatarSchema
 from ....common import StatusEnum
 
 
-class CreateMemberSchema(Schema):
-    user_uuid = fields.UUID()
-    league_uuid = fields.UUID(missing=None)
-    email = fields.String()
-    username = fields.String()
-    display_name = fields.String()
-
-
 class DumpMemberSchema(Schema):
     uuid = fields.UUID()
     ctime = fields.Integer()
@@ -23,6 +15,7 @@ class DumpMemberSchema(Schema):
     email = fields.String()
     username = fields.String()
     display_name = fields.String()
+    country = fields.String()
     status = EnumField(StatusEnum)
     avatar = fields.Nested(DumpAvatarSchema)
 
@@ -74,7 +67,6 @@ class BulkMemberSchema(Schema):
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 
-create_schema = CreateMemberSchema()
 dump_schema = DumpMemberSchema()
 dump_many_schema = DumpMemberSchema(many=True)
 update_schema = UpdateMemberSchema()

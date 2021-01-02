@@ -12,7 +12,7 @@ class Member(db.Model, BaseMixin):
     username = db.Column(db.String(15), nullable=True)
     league_uuid = db.Column(UUIDType(binary=False), nullable=True)
     display_name = db.Column(db.String(50), nullable=True)
-
+    country = db.Column(db.String, nullable=False)
     # Search
     search_vector = db.Column(TSVectorType('display_name', 'username', weights={'display_name': 'A', 'username': 'B'}))
 

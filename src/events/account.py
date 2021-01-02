@@ -12,5 +12,5 @@ class Account:
         if key == 'account_created':
             self.logger.info('account created')
             _ = self.member_service.create(user_uuid=data['user_uuid'], username=data['username'],
-                                           email=data['email'], display_name=data['display_name'], status='active')
-
+                                           email=data['email'], display_name=data['display_name'],
+                                           country=data['country'], status='active')

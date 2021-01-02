@@ -70,20 +70,6 @@ class MembersListAPI(Base):
             }
         )
 
-    @marshal_with(DataResponse.marshallable())
-    def post(self):
-        data = self.clean(schema=create_schema, instance=request.get_json())
-        member = self.member.create(status='pending', user_uuid=data['user_uuid'],
-                                    league_uuid=data['league_uuid'])
-        return DataResponse(
-            data={
-                'members': self.dump(
-                    schema=dump_schema,
-                    instance=member
-                )
-            }
-        )
-
 
 class MembersListBulkAPI(Base):
     def __init__(self):
