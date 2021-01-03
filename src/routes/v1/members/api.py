@@ -86,7 +86,8 @@ class MembersListAPI(Base):
                     total_count=members.total,
                     page_count=len(members.items),
                     page=data['page'],
-                    per_page=data['per_page']),
+                    per_page=data['per_page'],
+                    search=data['search']),
                 'members': self.dump(
                     schema=dump_many_schema,
                     instance=members.items,
