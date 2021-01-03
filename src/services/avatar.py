@@ -19,6 +19,8 @@ class Avatar(Base):
         return Base.find(self, model=self.avatar_model, **kwargs)
 
     def create(self, **kwargs):
+        self.logger.info(kwargs)
+        self.logger.info(self.avatar_model)
         avatar = self.init(model=self.avatar_model, **kwargs)
         return self.save(instance=avatar)
 
