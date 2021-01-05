@@ -64,7 +64,7 @@ class member_notification:
     def generate_message(self, key, **kwargs):
         if key == 'member_invited':
             league = kwargs.get('league')
-            return f"You have invited you join {league['name']}"
+            return f"You have been invited to join {league['name']}"
         elif key == 'member_active':
             league = kwargs.get('league')
             member = kwargs.get('member')
