@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from .base import Base
 from ..decorators import member_notification
+from ..external import League as LeagueExternal
 from ..models import Member as MemberModel
 
 
@@ -31,3 +32,9 @@ class Member(Base):
         # if member status is being updated we will trigger a notification
         member = self.assign_attr(instance=instance, attr=kwargs)
         return self.save(instance=member)
+
+    # eventually integrate caching for these kinds of calls
+    def fetch_league(self, uuid):
+        res = LeagueExternal().fetch_league(uuid=uuid)
+        league = res['data']['leagues']
+        return league
