@@ -42,6 +42,7 @@ class member_notification:
             value = {
                 'uuid': str(new_instance.uuid),
                 'league_uuid': str(new_instance.league_uuid),
+                'league_owner_uuid': league['owner_uuid'],
                 'user_uuid': str(new_instance.user_uuid),
                 'message': self.generate_message(key=key, league=league)
             }
@@ -54,6 +55,7 @@ class member_notification:
             value = {
                 'uuid': str(new_instance.uuid),
                 'league_uuid': str(new_instance.league_uuid),
+                'league_owner_uuid': league['owner_uuid'],
                 'user_uuid': str(new_instance.user_uuid),
                 'message': self.generate_message(key=key, member=new_instance, league=league)
             }
@@ -66,10 +68,10 @@ class member_notification:
         elif key == 'member_active':
             league = kwargs.get('league')
             member = kwargs.get('member')
-            return f"{member.display_name} accepted invite to {league['display_name']}"
+            return f"{member.display_name} accepted invite to {league['name']}"
         elif key == 'member_inactive':
             league = kwargs.get('league')
             member = kwargs.get('member')
-            return f"{member.display_name} declined invite to {league['display_name']}"
+            return f"{member.display_name} declined invite to {league['name']}"
         else:
             return ''
