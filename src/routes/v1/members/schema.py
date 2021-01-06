@@ -34,7 +34,8 @@ class DumpMemberSchema(Schema):
 
 
 class UpdateMemberSchema(Schema):
-    status = fields.Str(required=True)
+    display_name = fields.Str(required=False)
+    status = fields.Str(required=False)
 
 
 class FetchMemberSchema(Schema):
