@@ -1,6 +1,7 @@
+from .v1 import AvatarsAPI
 from .v1 import MembersAPI, MembersUserAPI, MembersListAPI, MembersListBulkAPI
 from .v1 import PingAPI
-from .v1 import AvatarsAPI
+from .v1 import StatsListAPI, StatsAPI
 from .. import api
 
 # Ping
@@ -13,6 +14,10 @@ api.add_resource(MembersUserAPI, '/members/user/<user_uuid>',
 api.add_resource(MembersListAPI, '/members', endpoint="members")
 api.add_resource(MembersListBulkAPI, '/members/bulk',
                  endpoint="members_bulk")  # this call could be avoided if i added a contests table?
+
+# Stats
+api.add_resource(StatsAPI, '/stats/<uuid:uuid>', endpoint="stat")
+api.add_resource(StatsListAPI, '/stats', endpoint="stats")
 
 # Avatars
 api.add_resource(AvatarsAPI, '/members/<uuid>/avatars', endpoint="avatar")
