@@ -1,3 +1,4 @@
 from .Avatar import Avatar
 from .Member import Member
+from .Stat import Stat
 from .Status import Status
