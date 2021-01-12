@@ -3,6 +3,7 @@ from marshmallow_enum import EnumField
 from webargs import fields
 
 from ..avatars.schema import DumpAvatarSchema
+from ..stats.schema import DumpStatsSchema
 from ....common import StatusEnum
 
 
@@ -18,9 +19,13 @@ class DumpMemberSchema(Schema):
     country = fields.String()
     status = EnumField(StatusEnum)
     avatar = fields.Nested(DumpAvatarSchema)
+    stat = fields.Nested(DumpStatsSchema)
 
     def get_attribute(self, obj, attr, default):
         if attr == 'avatar':
+            return getattr(obj, attr, default) or {} if any(
+                attr in include for include in self.context.get('include', [])) else None
+        if attr == 'stat':
             return getattr(obj, attr, default) or {} if any(
                 attr in include for include in self.context.get('include', [])) else None
         else:
@@ -30,6 +35,8 @@ class DumpMemberSchema(Schema):
     def make_obj(self, data, **kwargs):
         if data.get('avatar', False) is None:
             del data['avatar']
+        if data.get('stat', False) is None:
+            del data['stat']
         return data
 
 

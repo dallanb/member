@@ -1,0 +1,58 @@
+from flask import request
+from flask_restful import marshal_with
+
+from ..base import Base
+from ....common.response import DataResponse
+from ....services import StatService
+from .schema import *
+
+
+class StatsAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.stat = StatService()
+
+    @marshal_with(DataResponse.marshallable())
+    def get(self, uuid):
+        data = self.clean(schema=fetch_schema, instance=request.args)
+        stats = self.stat.find(uuid=uuid, **data)
+        if not stats.total:
+            self.throw_error(http_code=self.code.NOT_FOUND)
+        return DataResponse(
+            data={
+                'stats': self.dump(
+                    schema=dump_schema,
+                    instance=stats.items[0],
+                    params={
+                        'expand': data['expand']
+                    }
+                )
+            }
+        )
+
+
+class StatsListAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.stat = StatService()
+
+    @marshal_with(DataResponse.marshallable())
+    def get(self):
+        data = self.clean(schema=fetch_all_schema, instance=request.args)
+        stats = self.stat.find(**data)
+        return DataResponse(
+            data={
+                '_metadata': self.prepare_metadata(
+                    total_count=stats.total,
+                    page_count=len(stats.items),
+                    page=data['page'],
+                    per_page=data['per_page']),
+                'stats': self.dump(
+                    schema=dump_many_schema,
+                    instance=stats.items,
+                    params={
+                        'expand': data['expand']
+                    }
+                )
+            }
+        )
