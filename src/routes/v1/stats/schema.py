@@ -16,7 +16,10 @@ class DumpStatsSchema(Schema):
     uuid = fields.UUID()
     ctime = fields.Integer()
     mtime = fields.Integer()
-    member = fields.Nested('DumpStatSchema', include=('uuid', 'ctime', 'mtime', 'username'))
+    win_count = fields.Integer()
+    winning_total = fields.Integer()
+    event_count = fields.Integer()
+    member = fields.Nested('DumpMemberSchema', include=('uuid', 'ctime', 'mtime', 'username'))
 
     def get_attribute(self, obj, attr, default):
         if attr == 'member':
