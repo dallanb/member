@@ -124,3 +124,31 @@ class MembersListBulkAPI(Base):
                 )
             }
         )
+
+
+class MembersListStandingsAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.member = MemberService()
+
+    @marshal_with(DataResponse.marshallable())
+    def get(self):
+        data = self.clean(schema=fetch_all_standings_schema, instance=request.args)
+        stats = self.member.find_standings(**data)
+        return DataResponse(
+            data={
+                '_metadata': self.prepare_metadata(
+                    total_count=stats.total,
+                    page_count=None,
+                    page=None,
+                    per_page=None
+                ),
+                'stats': self.dump(
+                    schema=dump_many_schema,
+                    instance=stats.items,
+                    params={
+                        'include': data['include']
+                    }
+                )
+            }
+        )

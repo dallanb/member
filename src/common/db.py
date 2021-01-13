@@ -67,20 +67,25 @@ class DB:
         if search is not None:
             query = full_text_search(query, search, sort=True)
         if sort_by is not None:
-            direction = re.search('[.](a|de)sc', sort_by)
-            if direction is not None:
-                direction = direction.group()
-            key = sort_by.split(direction)[0]
-            if direction == '.asc':
-                query = query.order_by(getattr(model, key).asc())
-            elif direction == '.desc':
-                query = query.order_by(getattr(model, key).desc())
-            else:  # for now, lack of a direction will be interpreted as asc
-                query = query.order_by(getattr(model, key).asc())
+            query = cls.apply_query_order_by(model=model, query=query, sort_by=sort_by)
         if limit is not None:
             query = query.limit(limit)
         if offset is not None:
             query = query.offset(offset)
+        return query
+
+    @classmethod
+    def apply_query_order_by(cls, model, query, sort_by):
+        direction = re.search('[.](a|de)sc', sort_by)
+        if direction is not None:
+            direction = direction.group()
+        key = sort_by.split(direction)[0]
+        if direction == '.asc':
+            query = query.order_by(getattr(model, key).asc())
+        elif direction == '.desc':
+            query = query.order_by(getattr(model, key).desc())
+        else:  # for now, lack of a direction will be interpreted as asc
+            query = query.order_by(getattr(model, key).asc())
         return query
 
     @classmethod
@@ -186,7 +191,16 @@ class DB:
         return filters
 
     @classmethod
-    def _clean_query(cls, query, **kwargs):
+    def clean_query(cls, model, expand=[], include=[], sort_by=None, nested=None, search=None,
+                    within=None, has_key=None, **kwargs):
+        filters = cls._generate_filters(model=model, nested=nested, within=within, has_key=has_key,
+                                        **kwargs)
+        query = cls._query_builder(model=model, filters=filters, search=search, include=include, expand=expand,
+                                   sort_by=sort_by)
+        return query
+
+    @classmethod
+    def run_query(cls, query, **kwargs):
         page = kwargs.get('page', None)
         per_page = kwargs.get('per_page', None)
 
@@ -225,13 +239,9 @@ class DB:
 
     @classmethod
     # TODO: Consider using dataclass instead of a named tuple
-    def find(cls, model, page=None, per_page=None, expand=[], include=[], sort_by=None, nested=None, search=None,
-             within=None, has_key=None, **kwargs):
-        filters = cls._generate_filters(model=model, nested=nested, within=within, has_key=has_key,
-                                        **kwargs)
-        query = cls._query_builder(model=model, filters=filters, search=search, include=include, expand=expand,
-                                   sort_by=sort_by)
-        return cls._clean_query(query, page=page, per_page=per_page)
+    def find(cls, model, page=None, per_page=None, **kwargs):
+        query = cls.clean_query(model=model, **kwargs)
+        return cls.run_query(query=query, page=page, per_page=per_page)
 
     @classmethod
     def destroy(cls, instance):

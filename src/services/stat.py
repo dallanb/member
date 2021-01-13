@@ -1,6 +1,7 @@
 import logging
 from http import HTTPStatus
 
+
 from .base import Base
 from ..models import Stat as StatModel
 
@@ -33,3 +34,5 @@ class Stat(Base):
         if not stats.total:
             self.error(code=HTTPStatus.NOT_FOUND)
         return Base.destroy(self, instance=stats.items[0])
+
+

@@ -1,10 +1,12 @@
 import logging
 from http import HTTPStatus
 
+from sqlalchemy.orm import aliased
+
 from .base import Base
 from ..decorators import member_notification
 from ..external import League as LeagueExternal, Contest as ContestExternal
-from ..models import Member as MemberModel
+from ..models import Member as MemberModel, Stat as StatModel
 
 
 class Member(Base):
@@ -12,6 +14,7 @@ class Member(Base):
         Base.__init__(self)
         self.logger = logging.getLogger(__name__)
         self.member_model = MemberModel
+        self.stat_model = StatModel
 
     def find(self, **kwargs):
         return Base.find(self, model=self.member_model, **kwargs)
@@ -44,3 +47,12 @@ class Member(Base):
         res = ContestExternal().fetch_contest_materialized(uuid=uuid)
         contest = res['data']['contests']
         return contest
+
+    def find_standings(self, sort_by=None, **kwargs):
+        entity = aliased(self.stat_model)
+        query = self.db.clean_query(model=self.member_model, **kwargs)
+        # join aliased table
+        query = query.join(entity)
+        if sort_by is not None:
+            query = self.db.apply_query_order_by(model=entity, query=query, sort_by=sort_by)
+        return self.db.run_query(query=query)
