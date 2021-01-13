@@ -11,7 +11,7 @@ class Contest:
 
     def handle_event(self, key, data):
         if key == 'participant_active' or key == 'owner_active':
-            self.logger.info('contest created')
+            self.logger.info('participant active')
             members = self.member_service.find(uuid=data['member_uuid'])
             if members.total:
                 member = members.items[0]
