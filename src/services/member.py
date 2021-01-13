@@ -49,10 +49,10 @@ class Member(Base):
         return contest
 
     def find_standings(self, sort_by=None, **kwargs):
-        entity = aliased(self.stat_model)
         query = self.db.clean_query(model=self.member_model, **kwargs)
         # join aliased table
-        query = query.join(entity)
         if sort_by is not None:
+            entity = aliased(self.stat_model)
+            query = query.join(entity)
             query = self.db.apply_query_order_by(model=entity, query=query, sort_by=sort_by)
         return self.db.run_query(query=query)
