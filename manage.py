@@ -2,7 +2,7 @@ import os
 
 from flask.cli import FlaskGroup
 
-from bin import init_status
+from bin import init_status, create_stat
 from src import app, db, common
 
 cli = FlaskGroup(app)
@@ -100,6 +100,11 @@ def flush_cache():
 @cli.command("load_status")
 def load_status():
     load_statuses()
+
+
+@cli.command("create_stats")
+def create_stats():
+    create_stat()
 
 
 if __name__ == "__main__":
