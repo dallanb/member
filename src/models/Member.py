@@ -23,7 +23,7 @@ class Member(db.Model, BaseMixin):
     # Relationship
     member_status = db.relationship("Status")
     avatar = db.relationship("Avatar", lazy="noload")
-    stat = db.relationship("Stat", lazy="noload", back_populates="member")
+    stat = db.relationship("Stat", uselist=False, lazy="noload", back_populates="member")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

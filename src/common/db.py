@@ -231,7 +231,6 @@ class DB:
                                         **kwargs)
         query = cls._query_builder(model=model, filters=filters, search=search, include=include, expand=expand,
                                    sort_by=sort_by)
-
         return cls._clean_query(query, page=page, per_page=per_page)
 
     @classmethod
