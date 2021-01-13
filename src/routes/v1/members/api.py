@@ -143,7 +143,7 @@ class MembersListStandingsAPI(Base):
                     page=None,
                     per_page=None
                 ),
-                'stats': self.dump(
+                'members': self.dump(
                     schema=dump_many_schema,
                     instance=stats.items,
                     params={

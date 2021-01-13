@@ -12,7 +12,7 @@ from ..common.error import *
 
 class DB:
     # Helpers
-    @classmethod
+    @classmethod  # TODO: refactor the entire query builder like i have for applying sort_by so that it can be used outside of this function
     def _query_builder(cls, model, filters=[], expand=[], include=[], search=None, sort_by=None, limit=None,
                        offset=None):
         query = db.session.query(model)
