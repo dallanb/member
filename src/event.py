@@ -12,6 +12,11 @@ def new_event_listener(event):
             Account().handle_event(key=key, data=data)
         except Exception:
             logging.error('Account event err')
+    if topic == 'contests':
+        try:
+            Contest().handle_event(key=key, data=data)
+        except Exception:
+            logging.error('Contest event err')
     if topic == 'leagues':
         try:
             League().handle_event(key=key, data=data)

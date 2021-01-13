@@ -13,6 +13,7 @@ class Config(object):
     KONG_URL = os.getenv("KONG_URL")
     MAILER_URL = os.getenv("MAILER_URL")
     ACCOUNT_URL = os.getenv("ACCOUNT_URL")
+    CONTEST_URL = os.getenv("CONTEST_URL")
     LEAGUE_URL = os.getenv("LEAGUE_URL")
     KAFKA_URL = os.getenv("KAFKA_URL")
     KAFKA_TOPICS = os.getenv("KAFKA_TOPICS").split(",")
