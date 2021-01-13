@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from .base import Base
 from ..decorators import member_notification
-from ..external import League as LeagueExternal
+from ..external import League as LeagueExternal, Contest as ContestExternal
 from ..models import Member as MemberModel
 
 
@@ -38,3 +38,9 @@ class Member(Base):
         res = LeagueExternal().fetch_league(uuid=uuid)
         league = res['data']['leagues']
         return league
+
+    # eventually integrate caching for these kinds of calls
+    def fetch_contest(self, uuid):
+        res = ContestExternal().fetch_contest_materialized(uuid=uuid)
+        contest = res['data']['contests']
+        return contest
