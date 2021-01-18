@@ -34,7 +34,6 @@ class Contest:
                 payouts = wager['party_payouts']
                 # payouts are only available to league members so we find all members belonging to a league
                 members = [lowest_scorer['member_uuid'] for lowest_scorer in lowest_scorers[:len(payouts)]]
-                # stats = self.stat_service.find(within={'member_uuid': members})
                 member_stats = self.stat_service.find_league_member_stats(league_uuid=data['league_uuid'],
                                                                           members=members)
                 if member_stats.total:
