@@ -5,7 +5,7 @@ from sqlalchemy.orm import aliased
 
 from .base import Base
 from ..decorators import member_notification
-from ..external import League as LeagueExternal, Contest as ContestExternal
+from ..external import League as LeagueExternal, Contest as ContestExternal, Wager as WagerExternal
 from ..models import Member as MemberModel, Stat as StatModel
 
 
@@ -56,3 +56,9 @@ class Member(Base):
             query = query.join(entity)
             query = self.db.apply_query_order_by(model=entity, query=query, sort_by=sort_by)
         return self.db.run_query(query=query)
+
+    # eventually integrate caching for these kinds of calls
+    def fetch_contest_wager(self, uuid):
+        res = WagerExternal().fetch_contest_wager(uuid=uuid)
+        contest = res['data']['contest']
+        return contest

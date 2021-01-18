@@ -50,3 +50,7 @@ def get_image_data(file):
 # provided a hash of contest participants this method will find the participant property with the lowest score field
 def find_lowest_scoring_participant(participants):
     return min(participants.values(), key=lambda x: x['score'])
+
+
+def sort_lowest_scoring_participant(participants):
+    return sorted(participants.values(), key=lambda x: x['score'])

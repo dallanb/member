@@ -15,6 +15,7 @@ class Config(object):
     ACCOUNT_URL = os.getenv("ACCOUNT_URL")
     CONTEST_URL = os.getenv("CONTEST_URL")
     LEAGUE_URL = os.getenv("LEAGUE_URL")
+    WAGER_URL = os.getenv("WAGER_URL")
     KAFKA_URL = os.getenv("KAFKA_URL")
     KAFKA_TOPICS = os.getenv("KAFKA_TOPICS").split(",")
     S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
