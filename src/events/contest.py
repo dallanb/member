@@ -39,7 +39,7 @@ class Contest:
                 if member_stats.total:
                     member_stats_dict = {str(member_stat_item.member_uuid): member_stat_item for member_stat_item in
                                          member_stats.items}
-                    for index, payout in enumerate(payouts):
-                        member_uuid = members[index]
-                        member_stat = member_stats_dict[member_uuid]
+                    for index, member in enumerate(members):
+                        member_stat = member_stats_dict[member]
+                        payout = payouts[str(index + 1)]
                         self.stat_service.apply(instance=member_stat, winning_total=member_stat.winning_total + payout)
