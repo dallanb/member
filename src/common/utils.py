@@ -45,3 +45,12 @@ def get_image_data(file):
     image_data = file[starter + 1:]
     image_data = bytes(image_data, encoding="ascii")
     return BytesIO(base64.b64decode(image_data))
+
+
+# provided a hash of contest participants this method will find the participant property with the lowest score field
+def find_lowest_scoring_participant(participants):
+    return min(participants.values(), key=lambda x: x['score'])
+
+
+def sort_lowest_scoring_participant(participants):
+    return sorted(participants.values(), key=lambda x: x['score'])
