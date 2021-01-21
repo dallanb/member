@@ -1,10 +1,9 @@
 from marshmallow import Schema, post_dump
 from webargs import fields
 
-# from ..members.schema import DumpMemberSchema
-
 
 class FetchStatSchema(Schema):
+    member_uuid = fields.UUID(required=False)
     expand = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 

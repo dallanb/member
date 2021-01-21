@@ -1,7 +1,8 @@
 from .v1 import AvatarsAPI
+from .v1 import InvitesAPI, InvitesListAPI
 from .v1 import MembersAPI, MembersUserAPI, MembersListAPI, MembersListBulkAPI, MembersListStandingsAPI
 from .v1 import PingAPI
-from .v1 import StatsListAPI, StatsAPI
+from .v1 import StatsListAPI, StatsAPI, StatsMemberAPI
 from .. import api
 
 # Ping
@@ -18,7 +19,12 @@ api.add_resource(MembersListStandingsAPI, '/members/standings', endpoint="member
 
 # Stats
 api.add_resource(StatsAPI, '/stats/<uuid:uuid>', endpoint="stat")
+api.add_resource(StatsMemberAPI, '/stats/member/<member_uuid:uuid>', endpoint="stat_member")
 api.add_resource(StatsListAPI, '/stats', endpoint="stats")
 
 # Avatars
 api.add_resource(AvatarsAPI, '/members/<uuid>/avatars', endpoint="avatar")
+
+# Invites
+api.add_resource(InvitesAPI, '/invites/<uuid:uuid>', endpoint='invite')
+api.add_resource(InvitesListAPI, '/invites', endpoint='invites')
