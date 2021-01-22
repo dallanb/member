@@ -22,10 +22,7 @@ class InvitesAPI(Base):
             data={
                 'invites': self.dump(
                     schema=dump_schema,
-                    instance=invites.items[0],
-                    params={
-                        'include': data['include']
-                    }
+                    instance=invites.items[0]
                 )
             }
         )
@@ -46,14 +43,10 @@ class InvitesListAPI(Base):
                     total_count=invites.total,
                     page_count=len(invites.items),
                     page=data['page'],
-                    per_page=data['per_page'],
-                    search=data['search']),
+                    per_page=data['per_page']),
                 'invites': self.dump(
                     schema=dump_many_schema,
-                    instance=invites.items,
-                    params={
-                        'include': data['include']
-                    }
+                    instance=invites.items
                 )
             }
         )
