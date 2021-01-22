@@ -7,7 +7,7 @@ from ..common import StatusEnum
 
 
 class Member(db.Model, BaseMixin):
-    user_uuid = db.Column(UUIDType(binary=False), primary_key=True, nullable=True)
+    user_uuid = db.Column(UUIDType(binary=False), nullable=True, primary_key=True, autoincrement=False)
     email = db.Column(EmailType, nullable=False)
     username = db.Column(db.String(15), nullable=True)
     league_uuid = db.Column(UUIDType(binary=False), nullable=True)
