@@ -104,7 +104,7 @@ class MembersListAPI(Base):
         invite = self.member.create(**data, status='invited')
         return DataResponse(
             data={
-                'invites': self.dump(
+                'members': self.dump(
                     schema=dump_schema,
                     instance=invite
                 )
