@@ -63,6 +63,7 @@ class FetchAllMemberSchema(Schema):
     search = fields.String(required=False, missing=None)
     user_uuid = fields.UUID(required=False)
     league_uuid = fields.UUID(required=False, missing=None)
+    status = fields.Str(required=False)
 
 
 class FetchAllMemberStandingsSchema(Schema):
