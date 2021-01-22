@@ -60,7 +60,7 @@ class InvitesListAPI(Base):
 
     @marshal_with(DataResponse.marshallable())
     def post(self):
-        data = self.clean(schema=create_schema, instance=request.args)
+        data = self.clean(schema=create_schema, instance=request.get_json())
         invite = self.invite.create(**data)
         return DataResponse(
             data={
