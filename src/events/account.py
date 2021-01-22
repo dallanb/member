@@ -16,3 +16,5 @@ class Account:
                                                 email=data['email'], display_name=data['display_name'],
                                                 country=data['country'], status='active')
             _ = self.stat_service.create(member=member)
+
+            # we also need to check if there are any pending invites for this user

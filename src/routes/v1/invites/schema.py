@@ -23,7 +23,6 @@ class FetchInviteSchema(Schema):
 class FetchAllInviteSchema(Schema):
     page = fields.Int(required=False, missing=1)
     per_page = fields.Int(required=False, missing=10)
-    include = fields.DelimitedList(fields.String(), required=False, missing=[])
     email = fields.String(required=False)
     league_uuid = fields.UUID(required=False, missing=None)
 

@@ -2,6 +2,7 @@ import enum
 
 
 class StatusEnum(enum.Enum):
-    pending = 1
-    active = 2
-    inactive = 3
+    invited = 1
+    pending = 2
+    active = 3
+    inactive = 4
