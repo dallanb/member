@@ -19,7 +19,7 @@ api.add_resource(MembersListStandingsAPI, '/members/standings', endpoint="member
 
 # Stats
 api.add_resource(StatsAPI, '/stats/<uuid:uuid>', endpoint="stat")
-api.add_resource(StatsMemberAPI, '/stats/member/<member_uuid:uuid>', endpoint="stat_member")
+api.add_resource(StatsMemberAPI, '/stats/member/<uuid:member_uuid>', endpoint="stat_member")
 api.add_resource(StatsListAPI, '/stats', endpoint="stats")
 
 # Avatars
