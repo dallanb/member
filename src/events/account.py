@@ -18,3 +18,10 @@ class Account:
             _ = self.stat_service.create(member=member)
 
             # we also need to check if there are any pending invites for this user
+            invited_members = self.member_service.find(status='invited')
+            if invited_members.total:
+                for invited_member in invited_members.items():
+                    self.member_service.apply(instance=invited_member, user_uuid=data['user_uuid'],
+                                              username=data['username'], display_name=data['display_name'],
+                                              country=data['country'], status='pending')
+                    _ = self.stat_service.create(member=member)
