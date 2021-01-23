@@ -23,4 +23,5 @@ def new_event_listener(event):
         try:
             League().handle_event(key=key, data=data)
         except Exception as ex:
+            logging.error(ex)
             logging.error('League event err')

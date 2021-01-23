@@ -16,7 +16,7 @@ class League:
                 'user_uuid': data['user_uuid'],
                 'email': data['email'],
                 'league_uuid': data['league_uuid'],
-                'status': data['status'],
+                'status': 'invited',
             }
             # fill in shared fields with the league-less existing (root) user
             if data['user_uuid']:
@@ -26,6 +26,7 @@ class League:
                     params['display_name'] = existing_member.display_name
                     params['username'] = existing_member.username
                     params['country'] = existing_member.country
+                    params['status'] = 'active'
 
             new_member = self.member_service.create(**params)
             _ = self.stat_service.create(member=new_member)

@@ -36,30 +36,27 @@ class member_notification:
         self._service = service
 
     def create(self, new_instance):
-        if new_instance.status == StatusEnum['pending'] or new_instance.status == StatusEnum['invited']:
-            key = f'member_{new_instance.status.name}'
-            league = self.service.fetch_league(uuid=str(new_instance.league_uuid))
-            value = {
-                'uuid': str(new_instance.uuid),
-                'league_uuid': str(new_instance.league_uuid),
-                'league_owner_uuid': league['owner_uuid'],
-                'user_uuid': str(new_instance.user_uuid) if new_instance.user_uuid else None,
-                'email': str(new_instance.email),
-                'message': self.generate_message(key=key, league=league)
-            }
-            self.service.notify(topic=self.topic, value=value, key=key, )
+        key = f'member_{new_instance.status.name}'
+        value = {
+            'uuid': str(new_instance.uuid),
+            'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+            'user_uuid': str(new_instance.user_uuid) if new_instance.user_uuid else None,
+            'email': str(new_instance.email),
+            'message': self.generate_message(key=key)
+        }
+        self.service.notify(topic=self.topic, value=value, key=key)
 
-    def update(self, prev_instance, new_instance, args):
+    def update(self, prev_instance, new_instance,
+               args):
         if prev_instance and prev_instance.get('status') and prev_instance['status'].name != new_instance.status.name:
+            self.service.check_member_invites(instance=new_instance)
             key = f'member_{new_instance.status.name}'
-            league = self.service.fetch_league(uuid=str(new_instance.league_uuid))
             value = {
                 'uuid': str(new_instance.uuid),
                 'league_uuid': str(new_instance.league_uuid),
-                'league_owner_uuid': league['owner_uuid'],
                 'user_uuid': str(new_instance.user_uuid),
                 'email': str(new_instance.email),
-                'message': self.generate_message(key=key, member=new_instance, league=league)
+                'message': self.generate_message(key=key, member=new_instance)
             }
             self.service.notify(topic=self.topic, value=value, key=key)
 
