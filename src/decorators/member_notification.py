@@ -1,7 +1,5 @@
 from functools import wraps
 
-from src.common import StatusEnum
-
 
 class member_notification:
     def __init__(self, operation):
@@ -57,6 +55,16 @@ class member_notification:
                 'user_uuid': str(new_instance.user_uuid),
                 'email': str(new_instance.email),
                 'message': self.generate_message(key=key, member=new_instance)
+            }
+            self.service.notify(topic=self.topic, value=value, key=key)
+        if args.get('avatar'):
+            key = 'avatar_created'
+            value = {
+                'uuid': str(args['avatar'].uuid),
+                'member_uuid': str(new_instance.uuid),
+                'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+                'user_uuid': str(new_instance.user_uuid),
+                's3_filename': str(args['avatar'].s3_filename)
             }
             self.service.notify(topic=self.topic, value=value, key=key)
 
