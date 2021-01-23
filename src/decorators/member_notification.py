@@ -43,7 +43,7 @@ class member_notification:
                 'uuid': str(new_instance.uuid),
                 'league_uuid': str(new_instance.league_uuid),
                 'league_owner_uuid': league['owner_uuid'],
-                'user_uuid': str(new_instance.user_uuid),
+                'user_uuid': str(new_instance.user_uuid) if new_instance.user_uuid else None,
                 'email': str(new_instance.email),
                 'message': self.generate_message(key=key, league=league)
             }
@@ -58,24 +58,13 @@ class member_notification:
                 'league_uuid': str(new_instance.league_uuid),
                 'league_owner_uuid': league['owner_uuid'],
                 'user_uuid': str(new_instance.user_uuid),
+                'email': str(new_instance.email),
                 'message': self.generate_message(key=key, member=new_instance, league=league)
             }
             self.service.notify(topic=self.topic, value=value, key=key)
 
     def generate_message(self, key, **kwargs):
         if key == 'member_invited':
-            league = kwargs.get('league')
-            return f"You have been invited to join {league['name']}"
-        if key == 'member_pending':
-            league = kwargs.get('league')
-            return f"You have been invited to join {league['name']}"
-        elif key == 'member_active':
-            league = kwargs.get('league')
-            member = kwargs.get('member')
-            return f"{member.display_name} accepted invite to {league['name']}"
-        elif key == 'member_inactive':
-            league = kwargs.get('league')
-            member = kwargs.get('member')
-            return f"{member.display_name} declined invite to {league['name']}"
+            return f"You have been invited to join Tech Tapir"
         else:
             return ''
