@@ -64,7 +64,7 @@ class Member(Base):
         return contest
 
     def check_member_invites(self, instance):
-        members = self.db.find(email=instance.email, status='invited')
+        members = self.find(email=instance.email, status='invited')
         if members.total:
             for member in members.items:
                 self.apply(instance=member, status='active', user_uuid=instance.user_uuid)
