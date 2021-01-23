@@ -23,5 +23,5 @@ class Account:
                 for invited_member in invited_members.items:
                     self.member_service.apply(instance=invited_member, user_uuid=data['user_uuid'],
                                               username=data['username'], display_name=data['display_name'],
-                                              country=data['country'], status='pending')
+                                              country=data['country'], status='active')
                     _ = self.stat_service.create(member=member)

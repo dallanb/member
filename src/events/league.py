@@ -20,7 +20,7 @@ class League:
             }
             # fill in shared fields with the league-less existing (root) user
             if data['user_uuid']:
-                members = self.member_service.find(user_uuid=data['user_uuid'], league_uuid=data['league_uuid'])
+                members = self.member_service.find(user_uuid=data['user_uuid'], league_uuid=None)
                 if members.total:
                     existing_member = members.items[0]
                     params['display_name'] = existing_member.display_name
