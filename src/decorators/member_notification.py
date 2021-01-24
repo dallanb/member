@@ -67,6 +67,16 @@ class member_notification:
                 's3_filename': str(args['avatar'].s3_filename)
             }
             self.service.notify(topic=self.topic, value=value, key=key)
+        if prev_instance and prev_instance.get('display_name') and prev_instance[
+            'display_name'] != new_instance.display_name:
+            key = 'display_name_updated'
+            value = {
+                'uuid': str(new_instance.uuid),
+                'user_uuid': str(new_instance.user_uuid),
+                'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+                'display_name': new_instance.display_name
+            }
+            self.service.notify(topic=self.topic, value=value, key=key)
 
     def generate_message(self, key, **kwargs):
         if key == 'member_invited':

@@ -47,8 +47,6 @@ class DumpMemberSchema(Schema):
 
 class UpdateMemberSchema(Schema):
     display_name = fields.Str(required=False)
-    status = fields.Str(required=False)
-
 
 class FetchMemberSchema(Schema):
     user_uuid = fields.UUID(required=False)
