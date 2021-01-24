@@ -98,19 +98,6 @@ class MembersListAPI(Base):
             }
         )
 
-    @marshal_with(DataResponse.marshallable())
-    def post(self):
-        data = self.clean(schema=create_schema, instance=request.get_json())
-        invite = self.member.create(**data, status='invited')
-        return DataResponse(
-            data={
-                'members': self.dump(
-                    schema=dump_schema,
-                    instance=invite
-                )
-            }
-        )
-
 
 class MembersListBulkAPI(Base):
     def __init__(self):

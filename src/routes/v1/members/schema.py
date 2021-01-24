@@ -7,11 +7,6 @@ from ..stats.schema import DumpStatsSchema
 from ....common import StatusEnum
 
 
-class CreateMemberSchema(Schema):
-    league_uuid = fields.UUID()
-    email = fields.String()
-
-
 class DumpMemberSchema(Schema):
     uuid = fields.UUID()
     ctime = fields.Integer()
@@ -47,6 +42,7 @@ class DumpMemberSchema(Schema):
 
 class UpdateMemberSchema(Schema):
     display_name = fields.Str(required=False)
+
 
 class FetchMemberSchema(Schema):
     user_uuid = fields.UUID(required=False)
@@ -89,7 +85,6 @@ class BulkMemberSchema(Schema):
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 
-create_schema = CreateMemberSchema()
 dump_schema = DumpMemberSchema()
 dump_many_schema = DumpMemberSchema(many=True)
 update_schema = UpdateMemberSchema()
