@@ -7,12 +7,12 @@ from ..common import StatusEnum
 
 
 class Member(db.Model, BaseMixin):
-    user_uuid = db.Column(UUIDType(binary=False), primary_key=True, nullable=False)
+    user_uuid = db.Column(UUIDType(binary=False), nullable=True)
     email = db.Column(EmailType, nullable=False)
     username = db.Column(db.String(15), nullable=True)
     league_uuid = db.Column(UUIDType(binary=False), nullable=True)
     display_name = db.Column(db.String(50), nullable=True)
-    country = db.Column(db.String, nullable=False)
+    country = db.Column(db.String, nullable=True)
     # Search
     search_vector = db.Column(TSVectorType('display_name', 'username', weights={'display_name': 'A', 'username': 'B'}))
 

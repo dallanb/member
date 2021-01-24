@@ -1,7 +1,5 @@
 from functools import wraps
 
-from src.common import StatusEnum
-
 
 class member_notification:
     def __init__(self, operation):
@@ -36,42 +34,52 @@ class member_notification:
         self._service = service
 
     def create(self, new_instance):
-        if new_instance.status == StatusEnum['pending']:
-            key = 'member_invited'
-            league = self.service.fetch_league(uuid=str(new_instance.league_uuid))
-            value = {
-                'uuid': str(new_instance.uuid),
-                'league_uuid': str(new_instance.league_uuid),
-                'league_owner_uuid': league['owner_uuid'],
-                'user_uuid': str(new_instance.user_uuid),
-                'message': self.generate_message(key=key, league=league)
-            }
-            self.service.notify(topic=self.topic, value=value, key=key, )
+        key = f'member_{new_instance.status.name}'
+        value = {
+            'uuid': str(new_instance.uuid),
+            'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+            'user_uuid': str(new_instance.user_uuid) if new_instance.user_uuid else None,
+            'email': str(new_instance.email),
+            'message': self.generate_message(key=key)
+        }
+        self.service.notify(topic=self.topic, value=value, key=key)
 
-    def update(self, prev_instance, new_instance, args):
+    def update(self, prev_instance, new_instance,
+               args):
         if prev_instance and prev_instance.get('status') and prev_instance['status'].name != new_instance.status.name:
+            self.service.check_member_invites(instance=new_instance)
             key = f'member_{new_instance.status.name}'
-            league = self.service.fetch_league(uuid=str(new_instance.league_uuid))
             value = {
                 'uuid': str(new_instance.uuid),
                 'league_uuid': str(new_instance.league_uuid),
-                'league_owner_uuid': league['owner_uuid'],
                 'user_uuid': str(new_instance.user_uuid),
-                'message': self.generate_message(key=key, member=new_instance, league=league)
+                'email': str(new_instance.email),
+                'message': self.generate_message(key=key, member=new_instance)
+            }
+            self.service.notify(topic=self.topic, value=value, key=key)
+        if args.get('avatar'):
+            key = 'avatar_created'
+            value = {
+                'uuid': str(args['avatar'].uuid),
+                'member_uuid': str(new_instance.uuid),
+                'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+                'user_uuid': str(new_instance.user_uuid),
+                's3_filename': str(args['avatar'].s3_filename)
+            }
+            self.service.notify(topic=self.topic, value=value, key=key)
+        if prev_instance and prev_instance.get('display_name') and prev_instance[
+            'display_name'] != new_instance.display_name:
+            key = 'display_name_updated'
+            value = {
+                'uuid': str(new_instance.uuid),
+                'user_uuid': str(new_instance.user_uuid),
+                'league_uuid': str(new_instance.league_uuid) if new_instance.league_uuid else None,
+                'display_name': new_instance.display_name
             }
             self.service.notify(topic=self.topic, value=value, key=key)
 
     def generate_message(self, key, **kwargs):
         if key == 'member_invited':
-            league = kwargs.get('league')
-            return f"You have been invited to join {league['name']}"
-        elif key == 'member_active':
-            league = kwargs.get('league')
-            member = kwargs.get('member')
-            return f"{member.display_name} accepted invite to {league['name']}"
-        elif key == 'member_inactive':
-            league = kwargs.get('league')
-            member = kwargs.get('member')
-            return f"{member.display_name} declined invite to {league['name']}"
+            return f"You have been invited to join Tech Tapir"
         else:
             return ''

@@ -31,6 +31,31 @@ class StatsAPI(Base):
         )
 
 
+class StatsMemberAPI(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.stat = StatService()
+
+    @marshal_with(DataResponse.marshallable())
+    def get(self, member_uuid):
+        data = self.clean(schema=fetch_schema, instance={**request.args,
+                                                         'member_uuid': member_uuid})  # not cleaning user_uuid at base request level so make sure it is cleaned here
+        stats = self.stat.find(**data)
+        if not stats.total:
+            self.throw_error(http_code=self.code.NOT_FOUND)
+        return DataResponse(
+            data={
+                'stats': self.dump(
+                    schema=dump_schema,
+                    instance=stats.items[0],
+                    params={
+                        'include': data['include']
+                    }
+                )
+            }
+        )
+
+
 class StatsListAPI(Base):
     def __init__(self):
         Base.__init__(self)

@@ -42,7 +42,6 @@ class DumpMemberSchema(Schema):
 
 class UpdateMemberSchema(Schema):
     display_name = fields.Str(required=False)
-    status = fields.Str(required=False)
 
 
 class FetchMemberSchema(Schema):
@@ -57,7 +56,9 @@ class FetchAllMemberSchema(Schema):
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
     search = fields.String(required=False, missing=None)
     user_uuid = fields.UUID(required=False)
+    email = fields.Email(required=False)
     league_uuid = fields.UUID(required=False, missing=None)
+    status = fields.Str(required=False)
 
 
 class FetchAllMemberStandingsSchema(Schema):
