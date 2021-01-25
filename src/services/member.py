@@ -5,7 +5,8 @@ from sqlalchemy.orm import aliased
 
 from .base import Base
 from ..decorators import member_notification
-from ..external import League as LeagueExternal, Contest as ContestExternal, Wager as WagerExternal
+from ..external import Account as AccountExternal, League as LeagueExternal, Contest as ContestExternal, \
+    Wager as WagerExternal
 from ..models import Member as MemberModel, Stat as StatModel
 
 
@@ -47,6 +48,11 @@ class Member(Base):
         res = ContestExternal().fetch_contest_materialized(uuid=uuid)
         contest = res['data']['contests']
         return contest
+
+    def fetch_account(self, uuid):
+        res = AccountExternal().fetch_account(uuid=uuid)
+        account = res['data']['accounts']
+        return account
 
     def find_standings(self, sort_by=None, **kwargs):
         query = self.db.clean_query(model=self.member_model, **kwargs)
