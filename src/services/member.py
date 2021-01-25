@@ -50,7 +50,7 @@ class Member(Base):
         return contest
 
     def fetch_account(self, uuid):
-        res = AccountExternal().fetch_account(uuid=uuid)
+        res = AccountExternal().fetch_account(uuid=uuid, params={'include': ['address']})
         account = res['data']['accounts']
         return account
 
