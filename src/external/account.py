@@ -1,0 +1,18 @@
+from .base import Base
+from .. import app
+
+
+class Account(Base):
+    def __init__(self):
+        Base.__init__(self)
+        self.base_url = app.config['ACCOUNT_URL']
+
+    def fetch_account(self, uuid, params=None):
+        url = f'{self.base_url}/accounts/{uuid}'
+        res = self.get(url=url, params=params)
+        return res.json()
+
+    def fetch_accounts(self, params=None):
+        url = f'{self.base_url}/accounts'
+        res = self.get(url=url, params=params)
+        return res.json()

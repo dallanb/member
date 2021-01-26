@@ -10,18 +10,19 @@ class Account:
         self.stat_service = StatService()
 
     def handle_event(self, key, data):
-        if key == 'account_created':
-            self.logger.info('account created')
-            member = self.member_service.create(user_uuid=data['user_uuid'], username=data['username'],
-                                                email=data['email'], display_name=data['display_name'],
-                                                country=data['country'], status='active')
+        if key == 'account_active':
+            self.logger.info('account active')
+            account = self.member_service.fetch_account(uuid=data['uuid'])
+            member = self.member_service.create(user_uuid=account['user_uuid'], username=account['username'],
+                                                email=account['email'], display_name=account['display_name'],
+                                                country=account['address']['country'], status=account['status'])
             _ = self.stat_service.create(member=member)
 
             # we also need to check if there are any pending invites for this user
-            invited_members = self.member_service.find(status='invited', email=data['email'])
+            invited_members = self.member_service.find(status='invited', email=account['email'])
             if invited_members.total:
                 for invited_member in invited_members.items:
-                    self.member_service.apply(instance=invited_member, user_uuid=data['user_uuid'],
-                                              username=data['username'], display_name=data['display_name'],
-                                              country=data['country'], status='active')
+                    self.member_service.apply(instance=invited_member, user_uuid=account['user_uuid'],
+                                              username=account['username'], display_name=account['display_name'],
+                                              country=account['address']['country'], status=account['status'])
                     _ = self.stat_service.create(member=member)
