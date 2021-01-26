@@ -67,6 +67,7 @@ class FetchAllMemberStandingsSchema(Schema):
     sort_by = fields.String(required=False)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
     league_uuid = fields.UUID(required=False, missing=None)
+    status = fields.String(required=False)
 
 
 class _BulkMemberWithinSchema(Schema):
