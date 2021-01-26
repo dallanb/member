@@ -25,4 +25,3 @@ class Account:
                     self.member_service.apply(instance=invited_member, user_uuid=account['user_uuid'],
                                               username=account['username'], display_name=account['display_name'],
                                               country=account['address']['country'], status=account['status'])
-                    _ = self.stat_service.create(member=member)
