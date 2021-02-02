@@ -30,8 +30,6 @@ class Wallet(Base):
     @wallet_notification(operation='update')
     def apply(self, instance, **kwargs):
         wallet = self.assign_attr(instance=instance, attr=kwargs)
-        self.logger.info("HEY WALLET HERE")
-        self.logger.info(wallet)
         return self.save(instance=wallet)
 
     def destroy(self, uuid, ):
