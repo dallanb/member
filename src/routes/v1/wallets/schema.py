@@ -17,7 +17,7 @@ class DumpWalletsSchema(Schema):
     uuid = fields.UUID()
     ctime = fields.Integer()
     mtime = fields.Integer()
-    balance = fields.Integer()
+    balance = fields.Float()
     member = fields.Nested('DumpMemberSchema', include=('uuid', 'ctime', 'mtime', 'username'))
 
     def get_attribute(self, obj, attr, default):
