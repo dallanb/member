@@ -4,6 +4,7 @@ from webargs import fields
 
 from ..avatars.schema import DumpAvatarSchema
 from ..stats.schema import DumpStatsSchema
+from ..wallets.schema import DumpWalletsSchema
 from ....common import StatusEnum
 
 
@@ -20,12 +21,16 @@ class DumpMemberSchema(Schema):
     status = EnumField(StatusEnum)
     avatar = fields.Nested(DumpAvatarSchema)
     stat = fields.Nested(DumpStatsSchema)
+    wallet = fields.Nested(DumpWalletsSchema)
 
     def get_attribute(self, obj, attr, default):
         if attr == 'avatar':
             return getattr(obj, attr, default) or {} if any(
                 attr in include for include in self.context.get('include', [])) else None
         if attr == 'stat':
+            return getattr(obj, attr, default) or {} if any(
+                attr in include for include in self.context.get('include', [])) else None
+        if attr == 'wallet':
             return getattr(obj, attr, default) or {} if any(
                 attr in include for include in self.context.get('include', [])) else None
         else:
@@ -37,6 +42,8 @@ class DumpMemberSchema(Schema):
             del data['avatar']
         if data.get('stat', False) is None:
             del data['stat']
+        if data.get('wallet', False) is None:
+            del data['wallet']
         return data
 
 
