@@ -1,7 +1,7 @@
 import logging
 
-from ..common import find_lowest_scoring_participant, sort_lowest_scoring_participant
-from ..services import MemberService, StatService
+from ..common import sort_lowest_scoring_participant
+from ..services import MemberService, StatService, WalletService
 
 
 class Contest:
@@ -9,6 +9,7 @@ class Contest:
         self.logger = logging.getLogger(__name__)
         self.member_service = MemberService()
         self.stat_service = StatService()
+        self.wallet_service = WalletService()
 
     def handle_event(self, key, data):
         if key == 'participant_active' or key == 'owner_active':
@@ -34,12 +35,16 @@ class Contest:
                 payouts = wager['party_payouts']
                 # payouts are only available to league members so we find all members belonging to a league
                 members = [lowest_scorer['member_uuid'] for lowest_scorer in lowest_scorers[:len(payouts)]]
-                member_stats = self.stat_service.find_league_member_stats(league_uuid=data['league_uuid'],
-                                                                          members=members)
-                if member_stats.total:
-                    member_stats_dict = {str(member_stat_item.member_uuid): member_stat_item for member_stat_item in
-                                         member_stats.items}
+                member_stats_wallet = self.member_service.find(league_uuid=data['league_uuid'],
+                                                               within={'uuid': members},
+                                                               include=['stat', 'wallet'])
+                if member_stats_wallet.total:
+                    member_stats_wallet_dict = {str(member_stat_wallet_item.uuid): member_stat_wallet_item for
+                                                member_stat_wallet_item in
+                                                member_stats_wallet.items}
                     for index, member in enumerate(members):
-                        member_stat = member_stats_dict[member]
+                        member_stat = member_stats_wallet_dict[member].stat
+                        member_wallet = member_stats_wallet_dict[member].wallet
                         payout = payouts[str(index + 1)]
                         self.stat_service.apply(instance=member_stat, winning_total=member_stat.winning_total + payout)
+                        self.wallet_service.apply(instance=member_wallet, balance=member_wallet.balance + payout)

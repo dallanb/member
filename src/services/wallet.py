@@ -21,8 +21,8 @@ class Wallet(Base):
         wallet = self.init(model=self.wallet_model, **kwargs)
         return self.save(instance=wallet)
 
-    def update(self, uuid, **kwargs):
-        wallets = self.find(uuid=uuid)
+    def update(self, find, **kwargs):
+        wallets = self.find(**find)
         if not wallets.total:
             self.error(code=HTTPStatus.NOT_FOUND)
         return self.apply(instance=wallets.items[0], **kwargs)

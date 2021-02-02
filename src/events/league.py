@@ -1,6 +1,6 @@
 import logging
 
-from ..services import MemberService, StatService
+from ..services import MemberService, StatService, WalletService
 
 
 class League:
@@ -8,6 +8,7 @@ class League:
         self.logger = logging.getLogger(__name__)
         self.member_service = MemberService()
         self.stat_service = StatService()
+        self.wallet_service = WalletService()
 
     def handle_event(self, key, data):
         if key == 'member_created':
@@ -30,3 +31,4 @@ class League:
 
             new_member = self.member_service.create(**params)
             _ = self.stat_service.create(member=new_member)
+            _ = self.wallet_service.create(member=new_member)

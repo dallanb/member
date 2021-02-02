@@ -5,7 +5,7 @@ from .. import db
 
 
 class Wallet(db.Model, BaseMixin):
-    balance = db.Column(db.BigInteger, nullable=False, default=0)
+    balance = db.Column(db.BigInteger, nullable=False, default=200)
 
     # FK
     member_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('member.uuid'), nullable=False)
