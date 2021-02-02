@@ -17,9 +17,7 @@ class Contest:
             members = self.member_service.find(uuid=data['member_uuid'], include=['stat', 'wallet'])
             if members.total:
                 member = members.items[0]
-                wager = self.member_service.fetch_contest_wager(uuid=data['contest_uuid'])
                 self.stat_service.apply(instance=member.stat, event_count=member.stat.event_count + 1)
-                self.wallet_service.apply(instance=member.wallet, event_count=member.wallet.balance - wager['buy_in'])
         if key == 'contest_completed':
             self.logger.info('contest completed')
             contest = self.member_service.fetch_contest(uuid=data['uuid'])

@@ -25,3 +25,9 @@ def new_event_listener(event):
         except Exception as ex:
             logging.error(ex)
             logging.error('League event err')
+    if topic == 'wagers':
+        try:
+            Wager().handle_event(key=key, data=data)
+        except Exception as ex:
+            logging.error(ex)
+            logging.error('Wager event err')

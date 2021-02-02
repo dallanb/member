@@ -1,9 +1,8 @@
 import logging
 from http import HTTPStatus
 
-from sqlalchemy.orm import aliased
-
 from .base import Base
+from ..decorators import wallet_notification
 from ..models import Wallet as WalletModel, Member as MemberModel
 
 
@@ -17,6 +16,7 @@ class Wallet(Base):
     def find(self, **kwargs):
         return Base.find(self, model=self.wallet_model, **kwargs)
 
+    @wallet_notification(operation='create')
     def create(self, **kwargs):
         wallet = self.init(model=self.wallet_model, **kwargs)
         return self.save(instance=wallet)
@@ -27,8 +27,11 @@ class Wallet(Base):
             self.error(code=HTTPStatus.NOT_FOUND)
         return self.apply(instance=wallets.items[0], **kwargs)
 
+    @wallet_notification(operation='update')
     def apply(self, instance, **kwargs):
         wallet = self.assign_attr(instance=instance, attr=kwargs)
+        self.logger.info("HEY WALLET HERE")
+        self.logger.info(wallet)
         return self.save(instance=wallet)
 
     def destroy(self, uuid, ):
@@ -36,9 +39,3 @@ class Wallet(Base):
         if not wallets.total:
             self.error(code=HTTPStatus.NOT_FOUND)
         return Base.destroy(self, instance=wallets.items[0])
-
-    def find_league_member_wallets(self, league_uuid, members):
-        query = self.db.clean_query(model=self.wallet_model, within={'member_uuid': members})
-        entity = aliased(self.member_model)
-        query = query.join(entity).filter(entity.league_uuid == league_uuid)
-        return self.db.run_query(query=query)
