@@ -14,13 +14,12 @@ class Contest:
     def handle_event(self, key, data):
         if key == 'participant_active' or key == 'owner_active':
             self.logger.info('participant active')
-            members = self.member_service.find(uuid=data['member_uuid'])
+            members = self.member_service.find(uuid=data['member_uuid'], include=['stat', 'wallet'])
             if members.total:
                 member = members.items[0]
-                stats = self.stat_service.find(member_uuid=member.uuid)
-                if stats.total:
-                    stat = stats.items[0]
-                    self.stat_service.apply(instance=stat, event_count=stat.event_count + 1)
+                wager = self.member_service.fetch_contest_wager(uuid=data['contest_uuid'])
+                self.stat_service.apply(instance=member.stat, event_count=member.stat.event_count + 1)
+                self.wallet_service.apply(instance=member.wallet, event_count=member.wallet.balance - wager['buy_in'])
         if key == 'contest_completed':
             self.logger.info('contest completed')
             contest = self.member_service.fetch_contest(uuid=data['uuid'])
@@ -34,17 +33,18 @@ class Contest:
                 wager = self.member_service.fetch_contest_wager(uuid=data['uuid'])
                 payouts = wager['party_payouts']
                 # payouts are only available to league members so we find all members belonging to a league
-                members = [lowest_scorer['member_uuid'] for lowest_scorer in lowest_scorers[:len(payouts)]]
-                member_stats_wallet = self.member_service.find(league_uuid=data['league_uuid'],
-                                                               within={'uuid': members},
-                                                               include=['stat', 'wallet'])
-                if member_stats_wallet.total:
-                    member_stats_wallet_dict = {str(member_stat_wallet_item.uuid): member_stat_wallet_item for
-                                                member_stat_wallet_item in
-                                                member_stats_wallet.items}
-                    for index, member in enumerate(members):
-                        member_stat = member_stats_wallet_dict[member].stat
-                        member_wallet = member_stats_wallet_dict[member].wallet
+                lowest_scoring_members = [lowest_scorer['member_uuid'] for lowest_scorer in
+                                          lowest_scorers[:len(payouts)]]
+                members = self.member_service.find(league_uuid=data['league_uuid'],
+                                                   within={'uuid': lowest_scoring_members},
+                                                   include=['stat', 'wallet'])
+                if members.total:
+                    members_dict = {str(member.uuid): member for
+                                    member in
+                                    members.items}
+                    for index, member in enumerate(lowest_scoring_members):
+                        member_stat = members_dict[member].stat
+                        member_wallet = members_dict[member].wallet
                         payout = payouts[str(index + 1)]
                         self.stat_service.apply(instance=member_stat, winning_total=member_stat.winning_total + payout)
                         self.wallet_service.apply(instance=member_wallet, balance=member_wallet.balance + payout)
