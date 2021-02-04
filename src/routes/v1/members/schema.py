@@ -53,7 +53,7 @@ class UpdateMemberSchema(Schema):
 
 class FetchMemberSchema(Schema):
     user_uuid = fields.UUID(required=False)
-    league_uuid = fields.UUID(required=False)
+    league_uuid = fields.UUID(required=False, missing=None)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 
