@@ -57,6 +57,12 @@ class FetchMemberSchema(Schema):
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 
+class FetchMemberUserSchema(Schema):
+    user_uuid = fields.UUID(required=False)
+    league_uuid = fields.UUID(required=False, missing=None)
+    include = fields.DelimitedList(fields.String(), required=False, missing=[])
+
+
 class FetchAllMemberSchema(Schema):
     page = fields.Int(required=False, missing=1)
     per_page = fields.Int(required=False, missing=10)
@@ -98,5 +104,6 @@ dump_many_schema = DumpMemberSchema(many=True)
 update_schema = UpdateMemberSchema()
 fetch_schema = FetchMemberSchema()
 fetch_all_schema = FetchAllMemberSchema()
+fetch_member_user_schema = FetchMemberUserSchema()
 fetch_all_standings_schema = FetchAllMemberStandingsSchema()
 bulk_schema = BulkMemberSchema()
