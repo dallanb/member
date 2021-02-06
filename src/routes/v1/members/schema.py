@@ -4,6 +4,7 @@ from webargs import fields
 
 from ..avatars.schema import DumpAvatarSchema
 from ..stats.schema import DumpStatsSchema
+from ..wallets.schema import DumpWalletsSchema
 from ....common import StatusEnum
 
 
@@ -20,12 +21,16 @@ class DumpMemberSchema(Schema):
     status = EnumField(StatusEnum)
     avatar = fields.Nested(DumpAvatarSchema)
     stat = fields.Nested(DumpStatsSchema)
+    wallet = fields.Nested(DumpWalletsSchema)
 
     def get_attribute(self, obj, attr, default):
         if attr == 'avatar':
             return getattr(obj, attr, default) or {} if any(
                 attr in include for include in self.context.get('include', [])) else None
         if attr == 'stat':
+            return getattr(obj, attr, default) or {} if any(
+                attr in include for include in self.context.get('include', [])) else None
+        if attr == 'wallet':
             return getattr(obj, attr, default) or {} if any(
                 attr in include for include in self.context.get('include', [])) else None
         else:
@@ -37,6 +42,8 @@ class DumpMemberSchema(Schema):
             del data['avatar']
         if data.get('stat', False) is None:
             del data['stat']
+        if data.get('wallet', False) is None:
+            del data['wallet']
         return data
 
 
@@ -47,6 +54,12 @@ class UpdateMemberSchema(Schema):
 class FetchMemberSchema(Schema):
     user_uuid = fields.UUID(required=False)
     league_uuid = fields.UUID(required=False)
+    include = fields.DelimitedList(fields.String(), required=False, missing=[])
+
+
+class FetchMemberUserSchema(Schema):
+    user_uuid = fields.UUID(required=False)
+    league_uuid = fields.UUID(required=False, missing=None)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
 
 
@@ -67,6 +80,7 @@ class FetchAllMemberStandingsSchema(Schema):
     sort_by = fields.String(required=False)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
     league_uuid = fields.UUID(required=False, missing=None)
+    status = fields.String(required=False)
 
 
 class _BulkMemberWithinSchema(Schema):
@@ -90,5 +104,6 @@ dump_many_schema = DumpMemberSchema(many=True)
 update_schema = UpdateMemberSchema()
 fetch_schema = FetchMemberSchema()
 fetch_all_schema = FetchAllMemberSchema()
+fetch_member_user_schema = FetchMemberUserSchema()
 fetch_all_standings_schema = FetchAllMemberStandingsSchema()
 bulk_schema = BulkMemberSchema()

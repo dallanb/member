@@ -66,6 +66,8 @@ class Member(Base):
     # eventually integrate caching for these kinds of calls
     def fetch_contest_wager(self, uuid):
         res = WagerExternal().fetch_contest_wager(uuid=uuid)
+        self.logger.info(res)
+        self.logger.info(res['data'])
         contest = res['data']['contest']
         return contest
 

@@ -1,6 +1,6 @@
 import logging
 
-from ..services import MemberService, StatService
+from ..services import MemberService, StatService, WalletService
 
 
 class Account:
@@ -8,6 +8,7 @@ class Account:
         self.logger = logging.getLogger(__name__)
         self.member_service = MemberService()
         self.stat_service = StatService()
+        self.wallet_service = WalletService()
 
     def handle_event(self, key, data):
         if key == 'account_active':
@@ -16,6 +17,7 @@ class Account:
             member = self.member_service.create(user_uuid=account['user_uuid'], username=account['username'],
                                                 email=account['email'], display_name=account['display_name'],
                                                 country=account['address']['country'], status=account['status'])
+            _ = self.wallet_service.create(member=member)
             _ = self.stat_service.create(member=member)
 
             # we also need to check if there are any pending invites for this user
@@ -25,4 +27,3 @@ class Account:
                     self.member_service.apply(instance=invited_member, user_uuid=account['user_uuid'],
                                               username=account['username'], display_name=account['display_name'],
                                               country=account['address']['country'], status=account['status'])
-                    _ = self.stat_service.create(member=member)

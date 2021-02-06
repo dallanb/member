@@ -2,6 +2,7 @@ from .v1 import AvatarsAPI
 from .v1 import MembersAPI, MembersUserAPI, MembersListAPI, MembersListBulkAPI, MembersListStandingsAPI
 from .v1 import PingAPI
 from .v1 import StatsListAPI, StatsAPI, StatsMemberAPI
+from .v1 import WalletsListAPI, WalletsAPI, WalletsMemberAPI
 from .. import api
 
 # Ping
@@ -20,6 +21,11 @@ api.add_resource(MembersListStandingsAPI, '/members/standings', endpoint="member
 api.add_resource(StatsAPI, '/stats/<uuid:uuid>', endpoint="stat")
 api.add_resource(StatsMemberAPI, '/stats/member/<uuid:member_uuid>', endpoint="stat_member")
 api.add_resource(StatsListAPI, '/stats', endpoint="stats")
+
+# Stats
+api.add_resource(WalletsAPI, '/wallets/<uuid:uuid>', endpoint="wallet")
+api.add_resource(WalletsMemberAPI, '/wallets/member/<uuid:member_uuid>', endpoint="wallet_member")
+api.add_resource(WalletsListAPI, '/wallets', endpoint="wallets")
 
 # Avatars
 api.add_resource(AvatarsAPI, '/members/<uuid>/avatars', endpoint="avatar")
