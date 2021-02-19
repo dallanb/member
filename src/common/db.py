@@ -12,13 +12,9 @@ from ..common.error import *
 
 class DB:
     # Helpers
-    @classmethod  # TODO: refactor the entire query builder like i have for applying sort_by so that it can be used outside of this function
-    def _query_builder(cls, model, filters=None, expand=None, include=None, search=None, sort_by=None, limit=None,
-                       offset=None):
-
-    @staticmethod
-    def _query_builder(model, filters, expand=None, include=None, sort_by=None, limit=None,
-                       offset=None):
+    # TODO: refactor the entire query builder like i have for applying sort_by so that it can be used outside of this function
+    def _query_builder(self, model, filters, expand=None, include=None, sort_by=None, limit=None,
+                       offset=None, search=None):
         query = db.session.query(model)
         for logic_operator, filter_arr in filters:
             criterion = []
@@ -61,15 +57,15 @@ class DB:
         if search is not None:
             query = full_text_search(query, search, sort=True)
         if sort_by is not None:
-            query = cls.apply_query_order_by(model=model, query=query, sort_by=sort_by)
+            query = self.apply_query_order_by(model=model, query=query, sort_by=sort_by)
         if limit is not None:
             query = query.limit(limit)
         if offset is not None:
             query = query.offset(offset)
         return query
 
-    @classmethod
-    def apply_query_order_by(cls, model, query, sort_by):
+    @staticmethod
+    def apply_query_order_by(model, query, sort_by):
         direction = re.search('[.](a|de)sc', sort_by)
         if direction is not None:
             direction = direction.group()
