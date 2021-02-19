@@ -24,7 +24,7 @@ services:
       - ./manage.py:/home/app/manage.py
       - ./setup.py:/home/app/setup.py
     env_file:
-      - ${HUNCHO_DIR}/env/dev/.env.member
+      - env/.env.member
       - ${HUNCHO_DIR}/secrets/s3/credentials.txt
     healthcheck:
       test: curl --fail -s member:5000/ping || exit 1
@@ -41,9 +41,9 @@ services:
     container_name: member_db
     image: postgres:9.6
     volumes:
-      - ${HUNCHO_DIR}/data/dev/member_db/data:/var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/data/
     env_file:
-      - ${HUNCHO_DIR}/env/dev/.env.member_db
+      - env/.env.member_db
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U member" ]
       interval: 10s
@@ -51,6 +51,8 @@ services:
       retries: 20
     networks:
       - app-net
+volumes:
+  db_data:
 networks:
   app-net:
     driver: bridge
