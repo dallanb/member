@@ -51,6 +51,26 @@ services:
       retries: 20
     networks:
       - app-net
+  member_kafka:
+    container_name: member_kafka
+    image: wurstmeister/kafka:latest
+    restart: on-failure
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - env/.env.member_kafka
+    depends_on:
+      - member_zookeeper
+    networks:
+      - app-net
+  member_zookeeper:
+    container_name: member_zookeeper
+    image: wurstmeister/zookeeper:latest
+    restart: on-failure
+    env_file:
+      - env/.env.member_zookeeper
+    networks:
+      - app-net
 volumes:
   db_data:
 networks:

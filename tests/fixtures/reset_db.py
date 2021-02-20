@@ -1,6 +1,6 @@
 import pytest
 
-from bin import init_contest_status, init_participant_status
+from bin import init_status
 from src import db, common
 
 
@@ -15,4 +15,4 @@ def reset_db():
     db.create_all()
     db.session.commit()
     # load
-    # Any Load operations
+    init_status(status_enums=common.StatusEnum)
