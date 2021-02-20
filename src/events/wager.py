@@ -11,8 +11,8 @@ class Wager:
     def handle_event(self, key, data):
         if key == 'stake_created':
             self.logger.info('stake created')
-            wallets = self.wallet_service.find(member_uuid= data['member_uuid'])
+            wallets = self.wallet_service.find(member_uuid=data['member_uuid'])
             if wallets.total:
                 wallet = wallets.items[0]
                 self.wallet_service.apply(instance=wallet, balance=wallet.balance - data['amount'])
-
+        # TODO when stake is inactive ensure we put money back in people's wallets

@@ -15,11 +15,11 @@ class Stat(Base):
         self.member_model = MemberModel
 
     def find(self, **kwargs):
-        return Base.find(self, model=self.stat_model, **kwargs)
+        return self._find( model=self.stat_model, **kwargs)
 
     def create(self, **kwargs):
-        stat = self.init(model=self.stat_model, **kwargs)
-        return self.save(instance=stat)
+        stat = self._init(model=self.stat_model, **kwargs)
+        return self._save(instance=stat)
 
     def update(self, uuid, **kwargs):
         stats = self.find(uuid=uuid)
@@ -28,8 +28,8 @@ class Stat(Base):
         return self.apply(instance=stats.items[0], **kwargs)
 
     def apply(self, instance, **kwargs):
-        stat = self.assign_attr(instance=instance, attr=kwargs)
-        return self.save(instance=stat)
+        stat = self._assign_attr(instance=instance, attr=kwargs)
+        return self._save(instance=stat)
 
     def destroy(self, uuid, ):
         stats = self.find(uuid=uuid)
