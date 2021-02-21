@@ -1,13 +1,14 @@
+import pytest
 from uuid import uuid4
 
-import pytest
-
 from .fixtures import *
+
 
 def pytest_configure(config):
     pytest.member = None
     pytest.wallet = None
     pytest.stat = None
+    pytest.avatar = None
     pytest.user_uuid = uuid4()
     pytest.member_uuid = uuid4()
     pytest.email = 'dallan.bhatti@techtapir.com'
