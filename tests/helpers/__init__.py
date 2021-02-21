@@ -1,3 +1,4 @@
+from .generate_uuid import generate_uuid
 from .member_notification_create import member_notification_create
 from .member_notification_update import member_notification_update
 from .new_event_listener import new_event_listener
