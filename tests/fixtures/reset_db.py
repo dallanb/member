@@ -10,6 +10,7 @@ def reset_db():
     meta = db.metadata
     for table in reversed(meta.sorted_tables):
         db.session.execute(table.delete())
+    db.session.expunge_all()
     db.session.commit()
     # create
     db.create_all()

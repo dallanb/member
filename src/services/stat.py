@@ -15,7 +15,7 @@ class Stat(Base):
         self.member_model = MemberModel
 
     def find(self, **kwargs):
-        return self._find( model=self.stat_model, **kwargs)
+        return self._find(model=self.stat_model, **kwargs)
 
     def create(self, **kwargs):
         stat = self._init(model=self.stat_model, **kwargs)
@@ -31,14 +31,3 @@ class Stat(Base):
         stat = self._assign_attr(instance=instance, attr=kwargs)
         return self._save(instance=stat)
 
-    def destroy(self, uuid, ):
-        stats = self.find(uuid=uuid)
-        if not stats.total:
-            self.error(code=HTTPStatus.NOT_FOUND)
-        return Base.destroy(self, instance=stats.items[0])
-
-    def find_league_member_stats(self, league_uuid, members):
-        query = self.db.clean_query(model=self.stat_model, within={'member_uuid': members})
-        entity = aliased(self.member_model)
-        query = query.join(entity).filter(entity.league_uuid == league_uuid)
-        return self.db.run_query(query=query)

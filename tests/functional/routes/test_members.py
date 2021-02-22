@@ -227,3 +227,33 @@ def test_update_member(pause_notification):
     members = response['data']['members']
     assert members['uuid'] is not None
     assert members['display_name'] == display_name
+
+
+#############
+# FAIL
+#############
+
+
+###########
+# Update
+###########
+def test_update_member_fail(pause_notification):
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the PUT endpoint 'member' is requested
+    THEN check that the response is valid
+    """
+    member_uuid = pytest.member.uuid
+    status = 'active'
+
+    # Headers
+    headers = {'X-Consumer-Custom-ID': pytest.user_uuid}
+
+    # Payload
+    payload = {'status': status}
+
+    # Request
+    response = app.test_client().put(f'/members/{member_uuid}', json=payload, headers=headers)
+
+    # Response
+    assert response.status_code == 400

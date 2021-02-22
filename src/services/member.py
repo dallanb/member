@@ -66,11 +66,11 @@ class Member(Base):
     # eventually integrate caching for these kinds of calls
     def fetch_contest_wager(self, uuid):
         res = WagerExternal().fetch_contest_wager(uuid=uuid)
-        self.logger.info(res)
-        self.logger.info(res['data'])
         contest = res['data']['contest']
         return contest
 
+    # Used to update the status of any members with a league_uuid associated with an account that went from invited
+    # to active
     def check_member_invites(self, instance):
         members = self.find(email=instance.email, status='invited')
         if members.total:

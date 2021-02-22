@@ -49,7 +49,7 @@ class WalletsMemberAPI(Base):
                     schema=dump_schema,
                     instance=wallets.items[0],
                     params={
-                        'include': data['include']
+                        'expand': data['expand']
                     }
                 )
             }

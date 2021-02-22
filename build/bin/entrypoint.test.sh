@@ -14,6 +14,7 @@ if [ "$DATABASE" = "app" ]; then
   echo "PostgreSQL started"
 fi
 
+
 while ! nc -z zookeeper 2181; do
   sleep 0.1
 done
