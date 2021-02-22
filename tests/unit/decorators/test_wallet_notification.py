@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from src import services
@@ -9,6 +11,7 @@ def test_wallet_notification_wallet_created(reset_db, kafka_conn_last_msg):
                                                     league_uuid=pytest.league_uuid, display_name=pytest.display_name,
                                                     country=pytest.country)
     pytest.wallet = services.WalletService().create(member=pytest.member)
+    time.sleep(0.5)
     msg = kafka_conn_last_msg('members')
     assert msg.key is not None
     assert msg.key == 'wallet_created'
