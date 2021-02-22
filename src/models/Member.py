@@ -7,6 +7,9 @@ from ..common import StatusEnum
 
 
 class Member(db.Model, BaseMixin):
+    # Constraints
+    __table_args__ = (db.UniqueConstraint('league_uuid', 'user_uuid', name='league_user'),)
+
     user_uuid = db.Column(UUIDType(binary=False), nullable=True)
     email = db.Column(EmailType, nullable=False)
     username = db.Column(db.String(15), nullable=True)
