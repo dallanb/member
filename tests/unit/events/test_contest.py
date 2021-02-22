@@ -72,53 +72,6 @@ def test_contest_contest_completed_sync(reset_db, pause_notification, mock_fetch
         assert stat.winning_total is not pytest.winning_total
 
 
-def test_contest_participant_active_async(reset_db, pause_notification, kafka_conn_custom_topics, seed_member,
-                                          seed_stat):
-    """
-    GIVEN 1 member instance and 1 stat instance in the database
-    WHEN the CONTEST service notifies Kafka that a participant is active
-    THEN event contest handle_event participant_active updates 1 stat instance in the database
-    """
-    kafka_conn_custom_topics(['contests_test'])
-    time.sleep(1)
-
-    key = 'participant_active'
-    value = {
-        'member_uuid': str(pytest.member.uuid)  # add the rest of the fields as you need them
-    }
-
-    services.Base().notify(topic='contests_test', value=value, key=key)
-    time.sleep(1)
-
-    stats = services.StatService().find()
-
-    assert stats.total == 1
-    assert stats.items[0].event_count == 1
-
-
-def test_contest_owner_active_async(reset_db, pause_notification, kafka_conn_custom_topics, seed_member, seed_stat):
-    """
-    GIVEN 1 member instance and 1 stat instance in the database
-    WHEN the CONTEST service notifies Kafka that a owner is active
-    THEN event contest handle_event participant_active updates 1 stat instance in the database
-    """
-    kafka_conn_custom_topics(['contests_test'])
-    time.sleep(1)
-
-    key = 'owner_active'
-    value = {
-        'member_uuid': str(pytest.member.uuid)  # add the rest of the fields as you need them
-    }
-
-    services.Base().notify(topic='contests_test', value=value, key=key)
-    time.sleep(1)
-
-    stats = services.StatService().find()
-
-    assert stats.total == 1
-    assert stats.items[0].event_count == 1
-
-
 def test_contest_contest_completed_async(reset_db, pause_notification, kafka_conn_custom_topics, mock_fetch_contest,
                                          mock_fetch_contest_wager,
                                          seed_member, seed_wallet, seed_stat, seed_other_member, seed_other_wallet,
@@ -141,7 +94,7 @@ def test_contest_contest_completed_async(reset_db, pause_notification, kafka_con
 
     services.Base().notify(topic='contests_test', value=value, key=key)
     time.sleep(1)
-    
+
     _ = services.MemberService().find()
     wallets = services.WalletService().find()
     stats = services.StatService().find()
