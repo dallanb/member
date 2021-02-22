@@ -39,20 +39,32 @@ class Member(Base):
 
     # eventually integrate caching for these kinds of calls
     def fetch_league(self, uuid):
-        res = LeagueExternal().fetch_league(uuid=uuid)
-        league = res['data']['leagues']
-        return league
+        try:
+            res = LeagueExternal().fetch_league(uuid=uuid)
+            league = res['data']['leagues']
+            return league
+        except TypeError:
+            self.logger.error(f'fetch league failed for uuid: {uuid}')
+            return None
 
     # eventually integrate caching for these kinds of calls
     def fetch_contest(self, uuid):
-        res = ContestExternal().fetch_contest_materialized(uuid=uuid)
-        contest = res['data']['contests']
-        return contest
+        try:
+            res = ContestExternal().fetch_contest_materialized(uuid=uuid)
+            contest = res['data']['contests']
+            return contest
+        except TypeError:
+            self.logger.error(f'fetch contest failed for uuid: {uuid}')
+            return None
 
     def fetch_account(self, uuid):
-        res = AccountExternal().fetch_account(uuid=uuid, params={'include': ['address']})
-        account = res['data']['accounts']
-        return account
+        try:
+            res = AccountExternal().fetch_account(uuid=uuid, params={'include': ['address']})
+            account = res['data']['accounts']
+            return account
+        except TypeError:
+            self.logger.error(f'fetch account failed for uuid: {uuid}')
+            return None
 
     def find_standings(self, sort_by=None, **kwargs):
         query = self.db.clean_query(model=self.member_model, **kwargs)
@@ -65,9 +77,13 @@ class Member(Base):
 
     # eventually integrate caching for these kinds of calls
     def fetch_contest_wager(self, uuid):
-        res = WagerExternal().fetch_contest_wager(uuid=uuid)
-        contest = res['data']['contest']
-        return contest
+        try:
+            res = WagerExternal().fetch_contest_wager(uuid=uuid)
+            contest = res['data']['contest']
+            return contest
+        except TypeError:
+            self.logger.error(f'fetch contest_wager failed for uuid: {uuid}')
+            return None
 
     # Used to update the status of any members with a league_uuid associated with an account that went from invited
     # to active
