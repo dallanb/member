@@ -22,7 +22,7 @@ api.add_resource(StatsAPI, '/stats/<uuid:uuid>', endpoint="stat")
 api.add_resource(StatsMemberAPI, '/stats/member/<uuid:member_uuid>', endpoint="stat_member")
 api.add_resource(StatsListAPI, '/stats', endpoint="stats")
 
-# Stats
+# Wallets
 api.add_resource(WalletsAPI, '/wallets/<uuid:uuid>', endpoint="wallet")
 api.add_resource(WalletsMemberAPI, '/wallets/member/<uuid:member_uuid>', endpoint="wallet_member")
 api.add_resource(WalletsListAPI, '/wallets', endpoint="wallets")

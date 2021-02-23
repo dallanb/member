@@ -49,7 +49,7 @@ class StatsMemberAPI(Base):
                     schema=dump_schema,
                     instance=stats.items[0],
                     params={
-                        'include': data['include']
+                        'expand': data['expand']
                     }
                 )
             }

@@ -1,6 +1,6 @@
 import logging
 
-from ..common import sort_lowest_scoring_participant
+from ..common import sort_lowest_scoring_participant, ManualException
 from ..services import MemberService, StatService, WalletService
 
 
@@ -21,6 +21,9 @@ class Contest:
         if key == 'contest_completed':
             self.logger.info('contest completed')
             contest = self.member_service.fetch_contest(uuid=data['uuid'])
+            if contest is None:
+                raise ManualException(err=f'contest with uuid: {data["uuid"]} not found')
+
             participants = contest['participants']
             lowest_scorers = sort_lowest_scoring_participant(participants)
             stats = self.stat_service.find(member_uuid=lowest_scorers[0]['member_uuid'])
@@ -29,6 +32,9 @@ class Contest:
                 self.stat_service.apply(instance=stat, win_count=stat.win_count + 1)
             if data['league_uuid']:
                 wager = self.member_service.fetch_contest_wager(uuid=data['uuid'])
+                if wager is None:
+                    raise ManualException(err=f'contest_wager with uuid: {data["uuid"]} not found')
+
                 payouts = wager['party_payouts']
                 # payouts are only available to league members so we find all members belonging to a league
                 lowest_scoring_members = [lowest_scorer['member_uuid'] for lowest_scorer in

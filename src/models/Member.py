@@ -7,6 +7,9 @@ from ..common import StatusEnum
 
 
 class Member(db.Model, BaseMixin):
+    # Constraints
+    __table_args__ = (db.UniqueConstraint('league_uuid', 'user_uuid', name='league_user'),)
+
     user_uuid = db.Column(UUIDType(binary=False), nullable=True)
     email = db.Column(EmailType, nullable=False)
     username = db.Column(db.String(15), nullable=True)
@@ -22,9 +25,9 @@ class Member(db.Model, BaseMixin):
 
     # Relationship
     member_status = db.relationship("Status")
-    avatar = db.relationship("Avatar", lazy="noload")
-    stat = db.relationship("Stat", uselist=False, lazy="noload", back_populates="member")
-    wallet = db.relationship("Wallet", uselist=False, lazy="noload", back_populates="member")
+    avatar = db.relationship("Avatar")
+    stat = db.relationship("Stat", uselist=False, back_populates="member")
+    wallet = db.relationship("Wallet", uselist=False, back_populates="member")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

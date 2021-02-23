@@ -35,6 +35,9 @@ COPY bin ./bin
 # copy build bin
 COPY build/bin/entrypoint.sh ./build/bin/entrypoint.sh
 
+# copy migrations
+COPY migrations ./migrations
+
 # copy seeds
 COPY seeds ./seeds
 

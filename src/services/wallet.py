@@ -14,26 +14,20 @@ class Wallet(Base):
         self.member_model = MemberModel
 
     def find(self, **kwargs):
-        return Base.find(self, model=self.wallet_model, **kwargs)
+        return self._find(model=self.wallet_model, **kwargs)
 
     @wallet_notification(operation='create')
     def create(self, **kwargs):
-        wallet = self.init(model=self.wallet_model, **kwargs)
-        return self.save(instance=wallet)
+        wallet = self._init(model=self.wallet_model, **kwargs)
+        return self._save(instance=wallet)
 
-    def update(self, find, **kwargs):
-        wallets = self.find(**find)
+    def update(self, uuid, **kwargs):
+        wallets = self.find(uuid=uuid)
         if not wallets.total:
             self.error(code=HTTPStatus.NOT_FOUND)
         return self.apply(instance=wallets.items[0], **kwargs)
 
     @wallet_notification(operation='update')
     def apply(self, instance, **kwargs):
-        wallet = self.assign_attr(instance=instance, attr=kwargs)
-        return self.save(instance=wallet)
-
-    def destroy(self, uuid, ):
-        wallets = self.find(uuid=uuid)
-        if not wallets.total:
-            self.error(code=HTTPStatus.NOT_FOUND)
-        return Base.destroy(self, instance=wallets.items[0])
+        wallet = self._assign_attr(instance=instance, attr=kwargs)
+        return self._save(instance=wallet)

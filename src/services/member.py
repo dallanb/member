@@ -18,12 +18,12 @@ class Member(Base):
         self.stat_model = StatModel
 
     def find(self, **kwargs):
-        return Base.find(self, model=self.member_model, **kwargs)
+        return self._find(model=self.member_model, **kwargs)
 
     @member_notification(operation='create')
     def create(self, **kwargs):
-        member = self.init(model=self.member_model, **kwargs)
-        return self.save(instance=member)
+        member = self._init(model=self.member_model, **kwargs)
+        return self._save(instance=member)
 
     def update(self, uuid, **kwargs):
         members = self.find(uuid=uuid)
@@ -34,25 +34,37 @@ class Member(Base):
     @member_notification(operation='update')
     def apply(self, instance, **kwargs):
         # if member status is being updated we will trigger a notification
-        member = self.assign_attr(instance=instance, attr=kwargs)
-        return self.save(instance=member)
+        member = self._assign_attr(instance=instance, attr=kwargs)
+        return self._save(instance=member)
 
     # eventually integrate caching for these kinds of calls
     def fetch_league(self, uuid):
-        res = LeagueExternal().fetch_league(uuid=uuid)
-        league = res['data']['leagues']
-        return league
+        try:
+            res = LeagueExternal().fetch_league(uuid=uuid)
+            league = res['data']['leagues']
+            return league
+        except TypeError:
+            self.logger.error(f'fetch league failed for uuid: {uuid}')
+            return None
 
     # eventually integrate caching for these kinds of calls
     def fetch_contest(self, uuid):
-        res = ContestExternal().fetch_contest_materialized(uuid=uuid)
-        contest = res['data']['contests']
-        return contest
+        try:
+            res = ContestExternal().fetch_contest_materialized(uuid=uuid)
+            contest = res['data']['contests']
+            return contest
+        except TypeError:
+            self.logger.error(f'fetch contest failed for uuid: {uuid}')
+            return None
 
     def fetch_account(self, uuid):
-        res = AccountExternal().fetch_account(uuid=uuid, params={'include': ['address']})
-        account = res['data']['accounts']
-        return account
+        try:
+            res = AccountExternal().fetch_account(uuid=uuid, params={'include': ['address']})
+            account = res['data']['accounts']
+            return account
+        except TypeError:
+            self.logger.error(f'fetch account failed for uuid: {uuid}')
+            return None
 
     def find_standings(self, sort_by=None, **kwargs):
         query = self.db.clean_query(model=self.member_model, **kwargs)
@@ -65,12 +77,16 @@ class Member(Base):
 
     # eventually integrate caching for these kinds of calls
     def fetch_contest_wager(self, uuid):
-        res = WagerExternal().fetch_contest_wager(uuid=uuid)
-        self.logger.info(res)
-        self.logger.info(res['data'])
-        contest = res['data']['contest']
-        return contest
+        try:
+            res = WagerExternal().fetch_contest_wager(uuid=uuid)
+            contest = res['data']['contest']
+            return contest
+        except TypeError:
+            self.logger.error(f'fetch contest_wager failed for uuid: {uuid}')
+            return None
 
+    # Used to update the status of any members with a league_uuid associated with an account that went from invited
+    # to active
     def check_member_invites(self, instance):
         members = self.find(email=instance.email, status='invited')
         if members.total:

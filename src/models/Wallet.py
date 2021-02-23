@@ -11,7 +11,7 @@ class Wallet(db.Model, BaseMixin):
     member_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('member.uuid'), nullable=False)
 
     # Relationship
-    member = db.relationship("Member", back_populates="wallet")
+    member = db.relationship("Member", back_populates="wallet", lazy="joined")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

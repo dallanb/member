@@ -1,5 +1,6 @@
 import logging
 
+from .. import ManualException
 from ..services import MemberService, StatService, WalletService
 
 
@@ -14,6 +15,8 @@ class Account:
         if key == 'account_active':
             self.logger.info('account active')
             account = self.member_service.fetch_account(uuid=data['uuid'])
+            if account is None:
+                raise ManualException(err=f'account with uuid: {data["uuid"]} not found')
             member = self.member_service.create(user_uuid=account['user_uuid'], username=account['username'],
                                                 email=account['email'], display_name=account['display_name'],
                                                 country=account['address']['country'], status=account['status'])
