@@ -25,7 +25,9 @@ class member_notification:
 
     @staticmethod
     def create(new_instance):
-        if new_instance.status.name == 'pending':
+        if new_instance.status.name == 'active':
+            member_active.from_data(member=new_instance).notify()
+        elif new_instance.status.name == 'pending':
             member_pending.from_data(member=new_instance).notify()
         elif new_instance.status.name == 'invited':
             member_invited.from_data(member=new_instance).notify()
