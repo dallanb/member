@@ -1,6 +1,5 @@
-import time
-
 import pytest
+import time
 
 from src import services
 
@@ -17,6 +16,7 @@ def test_wallet_notification_wallet_created(reset_db, kafka_conn_last_msg):
     assert msg.key == 'wallet_created'
     assert msg.value is not None
     assert msg.value['uuid'] == str(pytest.wallet.uuid)
+    time.sleep(0.5)
 
 
 def test_wallet_notification_wallet_updated(kafka_conn_last_msg):
@@ -26,3 +26,4 @@ def test_wallet_notification_wallet_updated(kafka_conn_last_msg):
     assert msg.key == 'wallet_updated'
     assert msg.value is not None
     assert msg.value['uuid'] == str(pytest.wallet.uuid)
+    time.sleep(0.5)
