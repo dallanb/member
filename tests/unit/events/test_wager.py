@@ -79,32 +79,3 @@ def test_wager_stake_created_async(reset_db, pause_notification, kafka_conn_cust
 
     assert wallets.total == 1
     assert wallets.items[0].balance == 195.0
-
-
-def test_wager_participant_inactive_async(reset_db, pause_notification, kafka_conn_custom_topics, seed_member,
-                                          seed_wallet):
-    """
-    GIVEN 1 member instance, 1 wallet instance in the database
-    WHEN the WAGER service notifies Kafka that a participant status has been updated to inactive
-    THEN event wager handle_event participant_inactive updates 1 wallet in the database
-    """
-    kafka_conn_custom_topics(['wagers_test'])
-    time.sleep(1)
-
-    key = 'participant_inactive'
-    value = {
-        'uuid': str(generate_uuid()),
-        'member_uuid': str(pytest.member.uuid),
-        'stake': 5.0
-    }
-
-    services.Base().notify(topic='wagers_test', value=value, key=key)
-    time.sleep(1)
-
-    members = services.MemberService().find()
-    wallets = services.WalletService().find()
-
-    assert members.total == 1
-
-    assert wallets.total == 1
-    assert wallets.items[0].balance == 205.0
