@@ -6,32 +6,13 @@ import pytest
 from src import services, events
 
 
-def test_contest_participant_active_sync(reset_db, pause_notification, seed_member, seed_stat):
+def test_contest_participant_completed_sync(reset_db, pause_notification, seed_member, seed_stat):
     """
     GIVEN 1 member instance and 1 stat instance in the database
-    WHEN directly calling event contest handle_event participant_active
-    THEN event contest handle_event participant_active updates 1 stat instance in the database
+    WHEN directly calling event contest handle_event participant_completed
+    THEN event contest handle_event participant_completed updates 1 stat instance in the database
     """
-    key = 'participant_active'
-    value = {
-        'member_uuid': str(pytest.member.uuid)  # add the rest of the fields as you need them
-    }
-
-    events.Contest().handle_event(key=key, data=value)
-
-    stats = services.StatService().find()
-
-    assert stats.total == 1
-    assert stats.items[0].event_count == 1
-
-
-def test_contest_owner_active_sync(reset_db, pause_notification, seed_member, seed_stat):
-    """
-    GIVEN 1 member instance and 1 stat instance in the database
-    WHEN directly calling event contest handle_event owner_active
-    THEN event contest handle_event participant_active updates 1 stat instance in the database
-    """
-    key = 'owner_active'
+    key = 'participant_completed'
     value = {
         'member_uuid': str(pytest.member.uuid)  # add the rest of the fields as you need them
     }
