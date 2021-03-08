@@ -1,4 +1,6 @@
-from marshmallow import Schema, post_dump, post_load
+import logging
+
+from marshmallow import Schema, pre_load, post_dump, post_load
 from marshmallow_enum import EnumField
 from webargs import fields
 
@@ -72,6 +74,13 @@ class FetchAllMemberSchema(Schema):
     email = fields.Email(required=False)
     league_uuid = fields.UUID(required=False, allow_none=True)
     status = fields.Str(required=False)
+
+    @pre_load
+    def prepare(self, data, **kwargs):
+        data = data.to_dict()
+        if data.get('league_uuid', None) == '':
+            data['league_uuid'] = None
+        return data
 
 
 class FetchAllMemberStandingsSchema(Schema):
