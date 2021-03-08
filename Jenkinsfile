@@ -28,7 +28,7 @@ pipeline {
             steps {
                 slackSend (color: '#0000FF', message: "Testing Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' ")
                 script {
-                    if (env.BRANCH_NAME == 'qaw') {
+                    if (dockerImage) {
                         try {
                             sh "docker build -f build/Dockerfile.test --cache-from $dockerImageName -t $registry:test ."
                             sh "docker-compose -f docker-compose.test.yaml up -d"
@@ -45,8 +45,10 @@ pipeline {
             post {
                 always {
                     script {
-                        testSummary = junit testResults: 'tests.xml'
-                        cobertura coberturaReportFile: 'coverage.xml', enableNewApi: true
+                        if(dockerImage) {
+                            testSummary = junit testResults: 'tests.xml'
+                            cobertura coberturaReportFile: 'coverage.xml', enableNewApi: true
+                        }
                     }
                     slackSend (
                        color: '#FFFF00',
