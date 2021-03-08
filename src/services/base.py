@@ -65,7 +65,7 @@ class Base:
         except IntegrityError:
             self.logger.error(f'commit error - IntegrityError')
             self.db.rollback()
-            self.error(code=HTTPStatus.INTERNAL_SERVER_ERROR)
+            self.error(code=HTTPStatus.BAD_REQUEST)
         except StatementError:
             self.logger.error(f'commit error - StatementError')
             self.db.rollback()
@@ -81,7 +81,7 @@ class Base:
         except IntegrityError:
             self.logger.error(f'save error - IntegrityError')
             self.db.rollback()
-            self.error(code=HTTPStatus.INTERNAL_SERVER_ERROR)
+            self.error(code=HTTPStatus.BAD_REQUEST)
         except StatementError:
             self.logger.error(f'save error - StatementError')
             self.db.rollback()
