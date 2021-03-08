@@ -70,7 +70,7 @@ class FetchAllMemberSchema(Schema):
     search = fields.String(required=False, missing=None)
     user_uuid = fields.UUID(required=False)
     email = fields.Email(required=False)
-    league_uuid = fields.UUID(required=False, missing=None)
+    league_uuid = fields.UUID(required=False, allow_none=True)
     status = fields.Str(required=False)
 
 
