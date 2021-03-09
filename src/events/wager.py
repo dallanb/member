@@ -15,4 +15,10 @@ class Wager:
             if wallets.total:
                 wallet = wallets.items[0]
                 self.wallet_service.apply(instance=wallet, balance=wallet.balance - data['amount'])
-        # TODO when stake is inactive ensure we put money back in people's wallets
+        # TODO when participant is inactive ensure we put money back in people's wallets
+        if key == 'participant_inactive':
+            self.logger.info('participant inactive')
+            wallets = self.wallet_service.find(member_uuid=data['member_uuid'])
+            if wallets.total:
+                wallet = wallets.items[0]
+                self.wallet_service.apply(instance=wallet, balance=wallet.balance + data['stake'])

@@ -14,6 +14,8 @@ class Contest:
     def handle_event(self, key, data):
         if key == 'participant_active' or key == 'owner_active':
             self.logger.info('participant active')
+        if key == 'participant_completed':
+            self.logger.info('participant completed')
             members = self.member_service.find(uuid=data['member_uuid'], include=['stat', 'wallet'])
             if members.total:
                 member = members.items[0]
