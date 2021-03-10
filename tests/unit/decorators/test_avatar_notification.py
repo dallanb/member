@@ -6,7 +6,7 @@ from src import services
 
 
 def test_avatar_notification_avatar_created(reset_db, kafka_conn_last_msg, seed_member, seed_avatar):
-    time.sleep(0.2)
+    time.sleep(0.5)
     msg = kafka_conn_last_msg('members')
     assert msg.key is not None
     assert msg.key == 'avatar_created'

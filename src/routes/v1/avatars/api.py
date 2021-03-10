@@ -41,8 +41,9 @@ class AvatarsListAPI(Base):
         s3_filename = self.avatar.generate_s3_filename(member_uuid=str(uuid))
         _ = self.avatar.upload_fileobj(file=data['avatar'], filename=s3_filename)
         if not avatar:
-            avatar = self.avatar.create(s3_filename=s3_filename)
-            self.member.apply(instance=members.items[0], avatar=avatar)
+            avatar = self.avatar.create(s3_filename=s3_filename, member=members.items[0])
+        else:
+            avatar = self.avatar.apply(instance=avatar, s3_filename=s3_filename)
         return DataResponse(
             data={
                 'avatars': self.dump(
