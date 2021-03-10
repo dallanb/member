@@ -1,7 +1,7 @@
 from functools import wraps
 
 from src.notifications import member_pending, member_invited, member_active, member_inactive, avatar_created, \
-    display_name_updated
+    display_name_updated, country_updated
 
 
 class member_notification:
@@ -16,8 +16,10 @@ class member_notification:
 
             if self.operation == 'create':
                 self.create(new_instance=new_instance)
-            if self.operation == 'update':
+            elif self.operation == 'update':
                 self.update(prev_instance=prev_instance, new_instance=new_instance, args=kwargs)
+            elif self.operation == 'update_user':
+                self.update_user(res=new_instance, args=kwargs)
 
             return new_instance
 
@@ -45,3 +47,11 @@ class member_notification:
         if prev_instance and prev_instance.get('display_name') and prev_instance[
             'display_name'] != new_instance.display_name:
             display_name_updated.from_data(member=new_instance).notify()
+
+    @staticmethod
+    # res identifies the number of updates that were actually made
+    def update_user(res, args):
+        user_uuid = args.get('user_uuid')
+        if res > 0:
+            if args.get('country'):
+                country_updated.from_data(uuid=user_uuid).notify()

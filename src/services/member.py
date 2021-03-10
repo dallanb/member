@@ -33,6 +33,7 @@ class Member(Base):
 
     # this will allow us to update all members that have a common user_uuid
     # since multiple members may share one user_uuid (different league_uuid's)
+    @member_notification(operation='update_user')
     def update_by_user(self, user_uuid, **kwargs):
         query = self.db.clean_query(model=self.member_model, user_uuid=user_uuid)
         return self._update(query=query, **kwargs)

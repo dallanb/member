@@ -58,3 +58,15 @@ def test_member_notification_display_name_updated(kafka_conn_last_msg):
     assert msg.key == 'display_name_updated'
     assert msg.value is not None
     assert msg.value['display_name'] == display_name
+
+
+def test_member_notification_country_updated(kafka_conn_last_msg):
+    country = 'US'
+    _ = services.MemberService().update_by_user(user_uuid=pytest.user_uuid, country=country)
+    msg = kafka_conn_last_msg('members')
+    assert msg.key is not None
+    assert msg.key == 'country_updated'
+    assert msg.value is not None
+    assert msg.value['uuid'] == str(pytest.member.uuid)
+    assert msg.value['user_uuid'] == str(pytest.user_uuid)
+    assert msg.value['country'] == country

@@ -1,4 +1,5 @@
 from .avatar_created import avatar_created
+from .country_updated import country_updated
 from .display_name_updated import display_name_updated
 from .member_active import member_active
 from .member_inactive import member_inactive

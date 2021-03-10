@@ -32,8 +32,4 @@ class Account:
                                               country=account['address']['country'], status=account['status'])
         elif key == 'country_updated':
             self.logger.info('country updated')
-            members = self.member_service.find(user_uuid=data['user_uuid'])
-            if not members.total:
-                raise ManualException(err=f'member with user_uuid: {data["user_uuid"]} not found')
-            for member in members.items:
-                self.member_service.apply(instance=member, country=data['country'])
+            self.member_service.update_by_user(user_uuid=data['user_uuid'], country=data['country'])
