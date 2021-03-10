@@ -1,2 +1,3 @@
+from .avatar_notification import avatar_notification
 from .member_notification import member_notification
 from .wallet_notification import wallet_notification

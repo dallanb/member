@@ -2,7 +2,7 @@ from marshmallow import Schema, pre_dump
 from webargs import fields
 
 
-class AvatarCreatedSchema(Schema):
+class AvatarDeletedSchema(Schema):
     league_uuid = fields.UUID(missing=None, attribute='member.league_uuid')
     user_uuid = fields.UUID(attribute='member.user_uuid')
     member_uuid = fields.UUID(attribute='member.uuid')
@@ -12,5 +12,5 @@ class AvatarCreatedSchema(Schema):
     @pre_dump
     def prepare(self, data, **kwargs):
         avatar = data['avatar']
-        data['member'] = avatar.member
+        data['member'] = avatar['member']
         return data

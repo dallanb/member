@@ -1,3 +1,6 @@
+from .avatar_notification_create import avatar_notification_create
+from .avatar_notification_delete import avatar_notification_delete
+from .avatar_notification_update import avatar_notification_update
 from .fetch_account import fetch_account
 from .fetch_contest import fetch_contest
 from .fetch_contest_wager import fetch_contest_wager

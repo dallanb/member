@@ -1,7 +1,7 @@
 from functools import wraps
 
-from src.notifications import member_pending, member_invited, member_active, member_inactive, avatar_created, \
-    display_name_updated, country_updated
+from src.notifications import member_pending, member_invited, member_active, member_inactive, display_name_updated, \
+    country_updated
 
 
 class member_notification:
@@ -42,8 +42,6 @@ class member_notification:
                 member_active.from_data(member=new_instance).notify()
             elif new_instance.status.name == 'inactive':
                 member_inactive.from_data(member=new_instance).notify()
-        if args.get('avatar'):
-            avatar_created.from_data(member=new_instance, avatar=args['avatar']).notify()
         if prev_instance and prev_instance.get('display_name') and prev_instance[
             'display_name'] != new_instance.display_name:
             display_name_updated.from_data(member=new_instance).notify()
