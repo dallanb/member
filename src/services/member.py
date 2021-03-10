@@ -31,6 +31,12 @@ class Member(Base):
             self.error(code=HTTPStatus.NOT_FOUND)
         return self.apply(instance=members.items[0], **kwargs)
 
+    # this will allow us to update all members that have a common user_uuid
+    # since multiple members may share one user_uuid (different league_uuid's)
+    def update_by_user(self, user_uuid, **kwargs):
+        query = self.db.clean_query(model=self.member_model, user_uuid=user_uuid)
+        return self._update(query=query, **kwargs)
+
     @member_notification(operation='update')
     def apply(self, instance, **kwargs):
         # if member status is being updated we will trigger a notification
