@@ -1,5 +1,3 @@
-import time
-
 import pytest
 
 from src import services, events
@@ -55,3 +53,30 @@ def test_account_country_updated_sync(reset_db, pause_notification, seed_member)
     members = services.MemberService().find()
     for member in members.items:
         assert member.country == 'US'
+
+
+def test_account_display_name_updated_sync(reset_db, pause_notification, seed_member):
+    """
+    GIVEN 2 member instance in the database
+    WHEN directly calling event account handle_event display_name_updated
+    THEN event account handle_event display_name_updated updates 1 member in the database
+    """
+    _ = services.MemberService().create(status='pending', user_uuid=pytest.user_uuid,
+                                        email=pytest.email, username=pytest.username,
+                                        league_uuid=None, display_name=pytest.display_name,
+                                        country=pytest.country)
+    key = 'display_name_updated'
+    value = {
+        'uuid': str(pytest.account_uuid),
+        'user_uuid': str(pytest.user_uuid),
+        'display_name': 'Baby D'
+    }
+
+    events.Account().handle_event(key=key, data=value)
+
+    members = services.MemberService().find()
+    for member in members.items:
+        if member.league_uuid is not None:
+            assert member.display_name == pytest.display_name
+        else:
+            assert member.display_name == 'Baby D'
