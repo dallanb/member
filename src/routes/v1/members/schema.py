@@ -1,5 +1,3 @@
-import logging
-
 from marshmallow import Schema, pre_load, post_dump, post_load
 from marshmallow_enum import EnumField
 from webargs import fields
@@ -61,8 +59,15 @@ class FetchMemberSchema(Schema):
 
 class FetchMemberUserSchema(Schema):
     user_uuid = fields.UUID(required=False)
-    league_uuid = fields.UUID(required=False, missing=None)
+    league_uuid = fields.UUID(required=False, allow_none=True)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
+
+    @pre_load
+    def prepare(self, data, **kwargs):
+        data = data.to_dict()
+        if data.get('league_uuid', None) == '':
+            data['league_uuid'] = None
+        return data
 
 
 class FetchAllMemberSchema(Schema):
