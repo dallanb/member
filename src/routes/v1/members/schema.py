@@ -64,7 +64,6 @@ class FetchMemberUserSchema(Schema):
 
     @pre_load
     def prepare(self, data, **kwargs):
-        data = data.to_dict()
         if data.get('league_uuid', None) == '':
             data['league_uuid'] = None
         return data
