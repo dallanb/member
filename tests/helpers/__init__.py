@@ -10,6 +10,8 @@ from .member_notification_create import member_notification_create
 from .member_notification_update import member_notification_update
 from .member_notification_update_user import member_notification_update_user
 from .new_event_listener import new_event_listener
+from .stat_notification_create import stat_notification_create
+from .stat_notification_update import stat_notification_update
 from .upload_file import upload_file
 from .upload_fileobj import upload_fileobj
 from .wallet_notification_create import wallet_notification_create

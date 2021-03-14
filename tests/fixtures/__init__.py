@@ -7,6 +7,7 @@ from .mock_fetch_contest_wager import mock_fetch_contest_wager
 from .mock_fetch_league import mock_fetch_league
 from .mock_member_notification import mock_member_notification_create, mock_member_notification_update, \
     mock_member_notification_update_user
+from .mock_stat_notification import mock_stat_notification_create, mock_stat_notification_update
 from .mock_upload_file import mock_upload_file
 from .mock_upload_fileobj import mock_upload_fileobj
 from .mock_wallet_notification import mock_wallet_notification_create, mock_wallet_notification_update
