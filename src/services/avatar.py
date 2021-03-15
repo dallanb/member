@@ -4,6 +4,7 @@ from http import HTTPStatus
 from .base import Base
 from .. import app
 from ..common.utils import s3_object_name, get_image_data
+from ..decorators import avatar_notification
 from ..libs import S3
 from ..models import Avatar as AvatarModel
 
@@ -18,6 +19,7 @@ class Avatar(Base):
     def find(self, **kwargs):
         return self._find(model=self.avatar_model, **kwargs)
 
+    @avatar_notification(operation='create')
     def create(self, **kwargs):
         avatar = self._init(model=self.avatar_model, **kwargs)
         return self._save(instance=avatar)
@@ -28,15 +30,20 @@ class Avatar(Base):
             self.error(code=HTTPStatus.NOT_FOUND)
         return self.apply(instance=avatars.items[0], **kwargs)
 
+    @avatar_notification(operation='update')
     def apply(self, instance, **kwargs):
         avatar = self._assign_attr(instance=instance, attr=kwargs)
         return self._save(instance=avatar)
 
-    def destroy(self, uuid, ):
+    def delete(self, uuid, ):
         avatars = self.find(uuid=uuid)
         if not avatars.total:
             self.error(code=HTTPStatus.NOT_FOUND)
-        return self._destroy(instance=avatars.items[0])
+        return self.destroy(instance=avatars.items[0])
+
+    @avatar_notification(operation='delete')
+    def destroy(self, instance):
+        return self._destroy(instance=instance)
 
     def upload_file(self, filename):
         result = self.s3.upload(filename=filename, bucket=app.config['S3_BUCKET'],

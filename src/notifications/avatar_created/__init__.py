@@ -10,6 +10,6 @@ class avatar_created(Base):
         super().__init__(key=self.key, data=data)
 
     @classmethod
-    def from_data(cls, member, avatar):
-        data = cls.schema.dump({'member': member, 'avatar': avatar})
+    def from_data(cls, avatar):
+        data = cls.schema.dump({'avatar': avatar})
         return avatar_created(data=data)

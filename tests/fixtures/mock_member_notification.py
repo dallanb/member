@@ -1,6 +1,6 @@
 import pytest
 
-from tests.helpers import member_notification_create, member_notification_update
+from tests.helpers import member_notification_create, member_notification_update, member_notification_update_user
 
 
 @pytest.fixture
@@ -11,3 +11,8 @@ def mock_member_notification_create(mocker):
 @pytest.fixture
 def mock_member_notification_update(mocker):
     yield mocker.patch('src.decorators.member_notification.update', member_notification_update)
+
+
+@pytest.fixture
+def mock_member_notification_update_user(mocker):
+    yield mocker.patch('src.decorators.member_notification.update_user', member_notification_update_user)

@@ -1,6 +1,6 @@
 import logging
 
-from src.events import Account, Contest, League, Wager
+from src.events import Account, Contest, League, Wager, Course
 
 
 def new_event_listener(event):
@@ -19,6 +19,12 @@ def new_event_listener(event):
         except Exception as ex:
             logging.error(ex)
             logging.error('contest error')
+    if topic == 'courses_test':
+        try:
+            Course().handle_event(key=key, data=data)
+        except Exception as ex:
+            logging.error(ex)
+            logging.error('course error')
     if topic == 'leagues_test':
         try:
             League().handle_event(key=key, data=data)

@@ -1,4 +1,4 @@
-from .v1 import AvatarsAPI
+from .v1 import AvatarsListAPI, AvatarsAPI
 from .v1 import MembersAPI, MembersUserAPI, MembersListAPI, MembersListBulkAPI, MembersListStandingsAPI
 from .v1 import PingAPI
 from .v1 import StatsListAPI, StatsAPI, StatsMemberAPI
@@ -28,4 +28,5 @@ api.add_resource(WalletsMemberAPI, '/wallets/member/<uuid:member_uuid>', endpoin
 api.add_resource(WalletsListAPI, '/wallets', endpoint="wallets")
 
 # Avatars
-api.add_resource(AvatarsAPI, '/members/<uuid>/avatars', endpoint="avatar")
+api.add_resource(AvatarsListAPI, '/members/<uuid:uuid>/avatars', endpoint="avatars")
+api.add_resource(AvatarsAPI, '/avatars/<uuid:uuid>', endpoint="avatar")

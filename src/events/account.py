@@ -30,3 +30,15 @@ class Account:
                     self.member_service.apply(instance=invited_member, user_uuid=account['user_uuid'],
                                               username=account['username'], display_name=account['display_name'],
                                               country=account['address']['country'], status=account['status'])
+        elif key == 'display_name_updated':
+            self.logger.info('display_name updated')
+            # we only need to handle the update of league-less display_name
+            members = self.member_service.find(user_uuid=data['user_uuid'],
+                                               league_uuid=None)
+            if not members.total:
+                raise ManualException(err=f'member with user_uuid: {data["user_uuid"]} and league_uuid: None not found')
+            member = members.items[0]
+            self.member_service.apply(instance=member, display_name=data['display_name'])
+        elif key == 'country_updated':
+            self.logger.info('country updated')
+            self.member_service.update_by_user(user_uuid=data['user_uuid'], country=data['country'])
