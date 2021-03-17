@@ -19,6 +19,12 @@ def new_event_listener(event):
         except Exception as ex:
             logging.error(ex)
             logging.error('Contest event err')
+    if topic == 'courses':
+        try:
+            Course().handle_event(key=key, data=data)
+        except Exception as ex:
+            logging.error(ex)
+            logging.error('Course event err')
     if topic == 'leagues':
         try:
             League().handle_event(key=key, data=data)

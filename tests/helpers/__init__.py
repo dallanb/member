@@ -1,3 +1,6 @@
+from .avatar_notification_create import avatar_notification_create
+from .avatar_notification_delete import avatar_notification_delete
+from .avatar_notification_update import avatar_notification_update
 from .fetch_account import fetch_account
 from .fetch_contest import fetch_contest
 from .fetch_contest_wager import fetch_contest_wager
@@ -5,7 +8,10 @@ from .fetch_league import fetch_league
 from .generate_uuid import generate_uuid
 from .member_notification_create import member_notification_create
 from .member_notification_update import member_notification_update
+from .member_notification_update_user import member_notification_update_user
 from .new_event_listener import new_event_listener
+from .stat_notification_create import stat_notification_create
+from .stat_notification_update import stat_notification_update
 from .upload_file import upload_file
 from .upload_fileobj import upload_fileobj
 from .wallet_notification_create import wallet_notification_create

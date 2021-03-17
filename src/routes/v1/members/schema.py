@@ -1,4 +1,4 @@
-from marshmallow import Schema, post_dump, post_load
+from marshmallow import Schema, pre_load, post_dump, post_load
 from marshmallow_enum import EnumField
 from webargs import fields
 
@@ -59,19 +59,32 @@ class FetchMemberSchema(Schema):
 
 class FetchMemberUserSchema(Schema):
     user_uuid = fields.UUID(required=False)
-    league_uuid = fields.UUID(required=False, missing=None)
+    league_uuid = fields.UUID(required=False, allow_none=True)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
+
+    @pre_load
+    def prepare(self, data, **kwargs):
+        if data.get('league_uuid', None) == '':
+            data['league_uuid'] = None
+        return data
 
 
 class FetchAllMemberSchema(Schema):
     page = fields.Int(required=False, missing=1)
     per_page = fields.Int(required=False, missing=10)
     include = fields.DelimitedList(fields.String(), required=False, missing=[])
-    search = fields.String(required=False, missing=None)
+    search = fields.String(required=False)
     user_uuid = fields.UUID(required=False)
     email = fields.Email(required=False)
     league_uuid = fields.UUID(required=False, allow_none=True)
     status = fields.Str(required=False)
+
+    @pre_load
+    def prepare(self, data, **kwargs):
+        data = data.to_dict()
+        if data.get('league_uuid', None) == '':
+            data['league_uuid'] = None
+        return data
 
 
 class FetchAllMemberStandingsSchema(Schema):

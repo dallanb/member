@@ -1,4 +1,4 @@
-from .avatars import AvatarsAPI
+from .avatars import AvatarsListAPI, AvatarsAPI
 from .base import Base
 from .members import MembersAPI, MembersUserAPI, MembersListAPI, MembersListBulkAPI, MembersListStandingsAPI
 from .ping import PingAPI

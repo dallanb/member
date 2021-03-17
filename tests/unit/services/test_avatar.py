@@ -46,6 +46,7 @@ def test_avatar_find_expand_member():
     assert avatar.member is not None
     assert avatar.member.uuid is not None
 
+
 def test_avatar_find_w_pagination(pause_notification):
     """
     GIVEN 2 avatar instance in the database
@@ -154,29 +155,45 @@ def test_avatar_create_w_bad_field(reset_db, pause_notification, seed_member):
 ###########
 # Destroy
 ###########
-def test_avatar_destroy(reset_db, pause_notification, seed_member, seed_avatar):
+def test_avatar_delete(reset_db, pause_notification, seed_member, seed_avatar):
     """
     GIVEN 1 avatar instance in the database
-    WHEN the destroy method is called
+    WHEN the delete method is called
     THEN it should return True and remove 1 avatar instance in the database
     """
-    avatar = avatar_service.destroy(uuid=pytest.avatar.uuid)
+    avatar = avatar_service.delete(uuid=pytest.avatar.uuid)
     assert avatar
 
     avatars = avatar_service.find()
     assert avatars.total == 0
 
 
-def test_avatar_destroy_w_bad_uuid(reset_db, pause_notification, seed_member, seed_avatar):
+def test_avatar_delete_w_bad_uuid(reset_db, pause_notification, seed_member, seed_avatar):
     """
     GIVEN 1 avatar instance in the database
-    WHEN the destroy method is called with random uuid
+    WHEN the delete method is called with random uuid
     THEN it should return ManualException with code 404
     """
     try:
-        _ = avatar_service.destroy(uuid=generate_uuid())
+        _ = avatar_service.delete(uuid=generate_uuid())
     except ManualException as ex:
         assert ex.code == 404
+
+
+###########
+# Destroy
+###########
+def test_avatar_destroy(reset_db, pause_notification, seed_member, seed_avatar):
+    """
+    GIVEN 1 avatar instance in the database
+    WHEN the destroy method is called
+    THEN it should return True and remove 1 avatar instance in the database
+    """
+    avatar = avatar_service.destroy(instance=pytest.avatar)
+    assert avatar
+
+    avatars = avatar_service.find()
+    assert avatars.total == 0
 
 
 ###########
