@@ -53,4 +53,4 @@ class Contest:
                         member_wallet = members_dict[member].wallet
                         payout = payouts[str(index + 1)]
                         self.stat_service.apply(instance=member_stat, winning_total=member_stat.winning_total + payout)
-                        self.wallet_service.apply(instance=member_wallet, balance=member_wallet.balance + payout)
+                        self.wallet_service.add_transaction(instance=member_wallet, amount=payout)

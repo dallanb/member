@@ -146,11 +146,11 @@ def test_wallet_create(reset_db, pause_notification, seed_member):
     assert wallet.member is not None
 
 
-def test_wallet_create_dup_member(pause_notification):
+def test_wallet_create_dup_member(reset_db, pause_notification, seed_member, seed_wallet):
     """
     GIVEN 1 wallet instance in the database
     WHEN the create method is called with duplicate member
-    THEN it should return 0 wallet and add 0 wallet instance into the database and ManualException with code 500
+    THEN it should return 0 wallet and add 0 wallet instance into the database and ManualException with code 400
     """
 
     try:

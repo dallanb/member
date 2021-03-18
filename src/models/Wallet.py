@@ -12,6 +12,7 @@ class Wallet(db.Model, BaseMixin):
 
     # Relationship
     member = db.relationship("Member", back_populates="wallet", lazy="joined")
+    transactions = db.relationship("WalletTransaction", back_populates="wallet")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
