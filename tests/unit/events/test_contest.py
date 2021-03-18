@@ -1,7 +1,6 @@
 import logging
-import time
-
 import pytest
+import time
 
 from src import services, events
 
@@ -43,11 +42,16 @@ def test_contest_contest_completed_sync(reset_db, pause_notification, mock_fetch
     events.Contest().handle_event(key=key, data=value)
 
     _ = services.MemberService().find()
-    wallets = services.WalletService().find()
+    wallets = services.WalletService().find(include=['transactions'])
     stats = services.StatService().find()
 
     for wallet in wallets.items:
         assert wallet.balance is not pytest.balance
+        transactions = wallet.transactions
+        for transaction in transactions:
+            if transaction.balance != pytest.balance:
+                assert transaction.balance == wallet.balance
+                assert transaction.amount == transaction.balance - pytest.balance
 
     for stat in stats.items:
         assert stat.winning_total is not pytest.winning_total
@@ -77,11 +81,16 @@ def test_contest_contest_completed_async(reset_db, pause_notification, kafka_con
     time.sleep(1)
 
     _ = services.MemberService().find()
-    wallets = services.WalletService().find()
+    wallets = services.WalletService().find(include=['transactions'])
     stats = services.StatService().find()
 
     for wallet in wallets.items:
         assert wallet.balance is not pytest.balance
+        transactions = wallet.transactions
+        for transaction in transactions:
+            if transaction.balance != pytest.balance:
+                assert transaction.balance == wallet.balance
+                assert transaction.amount == transaction.balance - pytest.balance
 
     for stat in stats.items:
         assert stat.winning_total is not pytest.winning_total

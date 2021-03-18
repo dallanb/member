@@ -146,11 +146,11 @@ def test_wallet_create(reset_db, pause_notification, seed_member):
     assert wallet.member is not None
 
 
-def test_wallet_create_dup_member(pause_notification):
+def test_wallet_create_dup_member(reset_db, pause_notification, seed_member, seed_wallet):
     """
     GIVEN 1 wallet instance in the database
     WHEN the create method is called with duplicate member
-    THEN it should return 0 wallet and add 0 wallet instance into the database and ManualException with code 500
+    THEN it should return 0 wallet and add 0 wallet instance into the database and ManualException with code 400
     """
 
     try:
@@ -278,3 +278,58 @@ def test_wallet_apply_w_bad_field(pause_notification):
         _ = wallet_service.apply(instance=pytest.wallet, junk='junk')
     except ManualException as ex:
         assert ex.code == 400
+
+
+###########
+# MISC
+###########
+def test_wallet_create_transaction(reset_db, pause_notification, seed_member):
+    """
+    GIVEN 1 wallet instance in the database
+    WHEN the create_transaction method is called
+    THEN it should return 1 wallet_transaction
+    """
+    instance = wallet_service._init(model=wallet_service.wallet_model, member=pytest.member)
+    pytest.wallet = wallet_service._save(instance=instance)
+
+    transaction = wallet_service.create_transaction(instance=pytest.wallet)
+    assert transaction.balance == pytest.balance
+    assert transaction.amount == pytest.balance
+
+
+def test_wallet_create_transaction_dup_wallet(pause_notification):
+    """
+    GIVEN 1 wallet instance in the database
+    WHEN the create_transaction method is called with a duplicate wallet
+    THEN it should return 0 wallet_transaction and ManualException with code 400
+    """
+    try:
+        _ = wallet_service.create_transaction(instance=pytest.wallet)
+    except ManualException as ex:
+        assert ex.code == 400
+
+
+def test_wallet_add_transaction(reset_db, pause_notification, seed_member, seed_wallet):
+    """
+    GIVEN 1 wallet instance in the database
+    WHEN the add_transaction method is called
+    THEN it should return 1 wallet_transaction
+    """
+    transaction = wallet_service.add_transaction(instance=pytest.wallet, amount=pytest.buy_in)
+    assert transaction.balance == pytest.balance + pytest.buy_in
+    assert transaction.amount == pytest.buy_in
+
+
+def test_wallet_add_transaction_fail(reset_db, pause_notification, seed_member):
+    """
+    GIVEN 1 wallet instance in the database
+    WHEN the add_transaction method is called without create
+    THEN it should return 0 wallet_transaction and ManualException with code 404
+    """
+    instance = wallet_service._init(model=wallet_service.wallet_model, member=pytest.member)
+    wallet = wallet_service._save(instance=instance)
+
+    try:
+        _ = wallet_service.add_transaction(instance=wallet, amount=pytest.buy_in)
+    except ManualException as ex:
+        assert ex.code == 404

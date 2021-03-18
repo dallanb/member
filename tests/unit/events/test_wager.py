@@ -26,7 +26,18 @@ def test_wager_stake_created_sync(reset_db, pause_notification, seed_member, see
     assert members.total == 1
 
     assert wallets.total == 1
-    assert wallets.items[0].balance == 195.0
+    wallet = wallets.items[0]
+    assert wallet.balance == 195.0
+
+    transactions = wallet.transactions
+    assert len(transactions) == 2
+    for transaction in transactions:
+        if transaction.next_transaction_uuid is None:
+            assert transaction.balance == wallet.balance
+            assert transaction.amount == -(value['amount'])
+        else:
+            assert transaction.balance == pytest.balance
+            assert transaction.amount == pytest.balance
 
 
 def test_wager_participant_inactive_sync(reset_db, pause_notification, seed_member, seed_wallet):
@@ -50,7 +61,18 @@ def test_wager_participant_inactive_sync(reset_db, pause_notification, seed_memb
     assert members.total == 1
 
     assert wallets.total == 1
-    assert wallets.items[0].balance == 205.0
+    wallet = wallets.items[0]
+    assert wallet.balance == 205.0
+
+    transactions = wallet.transactions
+    assert len(transactions) == 2
+    for transaction in transactions:
+        if transaction.next_transaction_uuid is None:
+            assert transaction.balance == wallet.balance
+            assert transaction.amount == value['stake']
+        else:
+            assert transaction.balance == pytest.balance
+            assert transaction.amount == pytest.balance
 
 
 def test_wager_stake_created_async(reset_db, pause_notification, kafka_conn_custom_topics, seed_member, seed_wallet):
@@ -78,4 +100,15 @@ def test_wager_stake_created_async(reset_db, pause_notification, kafka_conn_cust
     assert members.total == 1
 
     assert wallets.total == 1
-    assert wallets.items[0].balance == 195.0
+    wallet = wallets.items[0]
+    assert wallet.balance == 195.0
+
+    transactions = wallet.transactions
+    assert len(transactions) == 2
+    for transaction in transactions:
+        if transaction.next_transaction_uuid is None:
+            assert transaction.balance == wallet.balance
+            assert transaction.amount == -(value['amount'])
+        else:
+            assert transaction.balance == pytest.balance
+            assert transaction.amount == pytest.balance

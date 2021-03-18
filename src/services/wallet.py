@@ -2,8 +2,9 @@ import logging
 from http import HTTPStatus
 
 from .base import Base
+from .wallet_transaction import WalletTransaction as WalletTransactionService
 from ..decorators import wallet_notification
-from ..models import Wallet as WalletModel, Member as MemberModel
+from ..models import Wallet as WalletModel
 
 
 class Wallet(Base):
@@ -11,7 +12,7 @@ class Wallet(Base):
         Base.__init__(self)
         self.logger = logging.getLogger(__name__)
         self.wallet_model = WalletModel
-        self.member_model = MemberModel
+        self.wallet_transaction_service = WalletTransactionService()
 
     def find(self, **kwargs):
         return self._find(model=self.wallet_model, **kwargs)
@@ -19,7 +20,10 @@ class Wallet(Base):
     @wallet_notification(operation='create')
     def create(self, **kwargs):
         wallet = self._init(model=self.wallet_model, **kwargs)
-        return self._save(instance=wallet)
+        wallet = self._save(instance=wallet)
+        # create a transaction
+        _ = self.create_transaction(instance=wallet)
+        return wallet
 
     def update(self, uuid, **kwargs):
         wallets = self.find(uuid=uuid)
@@ -31,3 +35,26 @@ class Wallet(Base):
     def apply(self, instance, **kwargs):
         wallet = self._assign_attr(instance=instance, attr=kwargs)
         return self._save(instance=wallet)
+
+    def create_transaction(self, instance):
+        wallet_transactions = self.wallet_transaction_service.find(wallet_uuid=instance.uuid)
+        if wallet_transactions.total > 0:
+            self.error(code=HTTPStatus.BAD_REQUEST)
+        return self.wallet_transaction_service.create(wallet=instance, balance=instance.balance,
+                                                      amount=instance.balance,
+                                                      next_transaction_uuid=None)
+
+    def add_transaction(self, instance, amount):
+        wallet_transactions = self.wallet_transaction_service.find(wallet_uuid=instance.uuid,
+                                                                   next_transaction_uuid=None)
+        if wallet_transactions.total == 0:
+            self.error(code=HTTPStatus.NOT_FOUND)
+        prev_wallet_transaction = wallet_transactions.items[0]
+        wallet_transaction = self.wallet_transaction_service.create(wallet=instance,
+                                                                    balance=prev_wallet_transaction.balance + amount,
+                                                                    amount=amount)
+        self.wallet_transaction_service.apply(instance=prev_wallet_transaction,
+                                              next_transaction_uuid=wallet_transaction.uuid)
+        # update the wallet balance synchronously
+        self.apply(instance=instance, balance=wallet_transaction.balance)
+        return wallet_transaction

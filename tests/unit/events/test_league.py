@@ -1,6 +1,5 @@
-import time
-
 import pytest
+import time
 
 from src import services, events
 
@@ -24,11 +23,14 @@ def test_league_member_created_sync(reset_db, pause_notification):
 
     members = services.MemberService().find()
     wallets = services.WalletService().find()
+    transactions = services.WalletTransactionService().find()
     stats = services.StatService().find()
 
     assert members.total == 1
 
     assert wallets.total == 1
+
+    assert transactions.total == 1
 
     assert stats.total == 1
 
@@ -56,10 +58,13 @@ def test_league_member_created_async(reset_db, pause_notification, kafka_conn_cu
 
     members = services.MemberService().find()
     wallets = services.WalletService().find()
+    transactions = services.WalletTransactionService().find()
     stats = services.StatService().find()
 
     assert members.total == 1
 
     assert wallets.total == 1
+
+    assert transactions.total == 1
 
     assert stats.total == 1
