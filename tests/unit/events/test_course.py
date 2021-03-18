@@ -1,6 +1,5 @@
-import time
-
 import pytest
+import time
 
 from src import services, events
 from tests.helpers import generate_uuid
@@ -23,6 +22,11 @@ def test_course_course_approved_sync(reset_db, pause_notification, seed_member, 
     wallets = services.WalletService().find()
     wallet = wallets.items[0]
     assert wallet.balance == pytest.balance + 100.0
+    transactions = wallet.transactions
+    for transaction in transactions:
+        if transaction.balance != pytest.balance:
+            assert transaction.balance == wallet.balance
+            assert transaction.amount == 100.0
 
 
 def test_course_course_approved_async(reset_db, pause_notification, kafka_conn_custom_topics, seed_member, seed_wallet,
@@ -48,3 +52,8 @@ def test_course_course_approved_async(reset_db, pause_notification, kafka_conn_c
     wallets = services.WalletService().find()
     wallet = wallets.items[0]
     assert wallet.balance == pytest.balance + 100.0
+    transactions = wallet.transactions
+    for transaction in transactions:
+        if transaction.balance != pytest.balance:
+            assert transaction.balance == wallet.balance
+            assert transaction.amount == 100.0

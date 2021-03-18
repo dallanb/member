@@ -2,9 +2,9 @@ import logging
 from http import HTTPStatus
 
 from .base import Base
+from .wallet_transaction import WalletTransaction as WalletTransactionService
 from ..decorators import wallet_notification
 from ..models import Wallet as WalletModel
-from .wallet_transaction import WalletTransaction as WalletTransactionService
 
 
 class Wallet(Base):
@@ -50,9 +50,11 @@ class Wallet(Base):
         if wallet_transactions.total == 0:
             self.error(code=HTTPStatus.NOT_FOUND)
         prev_wallet_transaction = wallet_transactions.items[0]
-        wallet_transaction = self.wallet_transaction_service.create(balance=prev_wallet_transaction.balance + amount,
+        wallet_transaction = self.wallet_transaction_service.create(wallet=instance,
+                                                                    balance=prev_wallet_transaction.balance + amount,
                                                                     amount=amount)
-        self.wallet_transaction_service.apply(instance=prev_wallet_transaction, next_transaction=wallet_transaction)
+        self.wallet_transaction_service.apply(instance=prev_wallet_transaction,
+                                              next_transaction_uuid=wallet_transaction.uuid)
         # update the wallet balance synchronously
         self.apply(instance=instance, balance=wallet_transaction.balance)
         return wallet_transaction

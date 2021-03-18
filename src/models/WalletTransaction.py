@@ -9,8 +9,9 @@ class WalletTransaction(db.Model, BaseMixin):
     amount = db.Column(db.Float, nullable=False, default=0.0)
 
     # FK
-    wallet_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('wallet.uuid'), nullable=False)
-    next_transaction_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('wallet_transaction.uuid'), nullable=True)
+    wallet_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('wallet.uuid'), unique=False, nullable=False)
+    next_transaction_uuid = db.Column(UUIDType(binary=False), db.ForeignKey('wallet_transaction.uuid'), unique=True,
+                                      nullable=True)
 
     # Relationship
     wallet = db.relationship("Wallet", back_populates="transactions", lazy="joined")
