@@ -1,6 +1,8 @@
 import base64
+import logging
 import uuid as UUID
 from io import BytesIO
+from itertools import groupby
 from time import time
 
 from src import app
@@ -54,3 +56,21 @@ def find_lowest_scoring_participant(participants):
 
 def sort_lowest_scoring_participant(participants):
     return sorted(participants.values(), key=lambda x: x['score'])
+
+
+def has_tie(sorted_participants):
+    if len(sorted_participants) > 1:
+        if sorted_participants[0]['score'] == sorted_participants[1]['score']:
+            return True
+    return False
+
+
+def realign_payouts(payouts, results):
+    new_payouts = {}
+    idx = 0
+    for _, v in groupby(results, key=lambda x: x['score']):
+        if payouts.get(str(idx+1), None) is not None:
+            ties = len(list(v))
+            new_payouts[str(idx+1)] = sum([payouts.get(str(j+1), 0.0) for j in range(idx, idx+ties)]) / ties
+            idx += ties
+    return new_payouts
