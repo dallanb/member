@@ -2,7 +2,7 @@ from .kafka_conn import kafka_conn, kafka_conn_last_msg, kafka_conn_custom_topic
 from .mock_avatar_notification import mock_avatar_notification_create, mock_avatar_notification_delete, \
     mock_avatar_notification_update
 from .mock_fetch_account import mock_fetch_account
-from .mock_fetch_contest import mock_fetch_contest
+from .mock_fetch_contest import mock_fetch_contest, mock_fetch_contest_tie
 from .mock_fetch_contest_wager import mock_fetch_contest_wager
 from .mock_fetch_league import mock_fetch_league
 from .mock_member_notification import mock_member_notification_create, mock_member_notification_update, \

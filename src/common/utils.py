@@ -1,6 +1,8 @@
 import base64
+import logging
 import uuid as UUID
 from io import BytesIO
+from itertools import groupby
 from time import time
 
 from src import app
@@ -54,3 +56,11 @@ def find_lowest_scoring_participant(participants):
 
 def sort_lowest_scoring_participant(participants):
     return sorted(participants.values(), key=lambda x: x['score'])
+
+
+def has_tie(sorted_participants):
+    if len(sorted_participants) > 1:
+        if sorted_participants[0]['score'] == sorted_participants[1]['score']:
+            return True
+    return False
+
