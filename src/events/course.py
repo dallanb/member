@@ -18,4 +18,4 @@ class Course:
             members = self.member_service.find(user_uuid=data['created_by'], include=['wallet'])
             if members.total:
                 for member in members.items:
-                    self.wallet_service.apply(instance=member.wallet, balance=member.wallet.balance + 100.0)
+                    self.wallet_service.add_transaction(instance=member.wallet, amount=100.0)

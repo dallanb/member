@@ -1,4 +1,3 @@
-import logging
 import time
 
 import pytest
@@ -43,14 +42,55 @@ def test_contest_contest_completed_sync(reset_db, pause_notification, mock_fetch
     events.Contest().handle_event(key=key, data=value)
 
     _ = services.MemberService().find()
-    wallets = services.WalletService().find()
+    wallets = services.WalletService().find(include=['transactions'])
     stats = services.StatService().find()
 
     for wallet in wallets.items:
         assert wallet.balance is not pytest.balance
+        transactions = wallet.transactions
+        for transaction in transactions:
+            if transaction.balance != pytest.balance:
+                assert transaction.balance == wallet.balance
+                assert transaction.amount == transaction.balance - pytest.balance
 
     for stat in stats.items:
         assert stat.winning_total is not pytest.winning_total
+
+
+def test_contest_contest_completed_in_a_tie_sync(reset_db, pause_notification, mock_fetch_contest_tie,
+                                                 mock_fetch_contest_wager,
+                                                 seed_member, seed_wallet, seed_stat, seed_other_member,
+                                                 seed_other_wallet,
+                                                 seed_other_stat):
+    """
+    GIVEN 2 member instance, 2 wallet instance and 2 stat instance in the database
+    WHEN directly calling event contest handle_event contest_completed with a tie
+    THEN event contest handle_event contest_completed updates 1 stat, 1 member and 1 wallet instance in the database
+    """
+    key = 'contest_completed'
+    value = {
+        'uuid': str(pytest.contest_uuid),
+        'league_uuid': str(pytest.league_uuid),
+        'owner_uuid': str(pytest.user_uuid)
+    }
+
+    events.Contest().handle_event(key=key, data=value)
+
+    _ = services.MemberService().find()
+    wallets = services.WalletService().find(include=['transactions'])
+    stats = services.StatService().find()
+
+    for wallet in wallets.items:
+        assert wallet.balance is not pytest.balance
+        transactions = wallet.transactions
+        for transaction in transactions:
+            if transaction.balance != pytest.balance:
+                assert transaction.balance == wallet.balance
+                assert transaction.amount == transaction.balance - pytest.balance
+
+    for stat in stats.items:
+        assert stat.winning_total is not pytest.winning_total
+        assert stat.win_count == 0
 
 
 def test_contest_contest_completed_async(reset_db, pause_notification, kafka_conn_custom_topics, mock_fetch_contest,
@@ -77,11 +117,16 @@ def test_contest_contest_completed_async(reset_db, pause_notification, kafka_con
     time.sleep(1)
 
     _ = services.MemberService().find()
-    wallets = services.WalletService().find()
+    wallets = services.WalletService().find(include=['transactions'])
     stats = services.StatService().find()
 
     for wallet in wallets.items:
         assert wallet.balance is not pytest.balance
+        transactions = wallet.transactions
+        for transaction in transactions:
+            if transaction.balance != pytest.balance:
+                assert transaction.balance == wallet.balance
+                assert transaction.amount == transaction.balance - pytest.balance
 
     for stat in stats.items:
         assert stat.winning_total is not pytest.winning_total
