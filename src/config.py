@@ -10,8 +10,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
     SQLALCHEMY_TRACK_MODIFICATIONS = True  # Update to true for search
     SECRET_KEY = os.getenv("SECRET_KEY")
-    KONG_URL = os.getenv("KONG_URL")
-    MAILER_URL = os.getenv("MAILER_URL")
     ACCOUNT_URL = os.getenv("ACCOUNT_URL")
     CONTEST_URL = os.getenv("CONTEST_URL")
     LEAGUE_URL = os.getenv("LEAGUE_URL")
