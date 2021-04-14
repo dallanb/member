@@ -15,5 +15,6 @@ LEAGUE_URL=http://192.168.0.150:30009
 WAGER_URL=http://192.168.0.150:30005
 KAFKA_URL=kafka:9092
 KAFKA_TOPICS=accounts,contest,courses,leagues,wagers
+KAFKA_GROUP_ID=app
 S3_FILEPATH=member/avatars/
 ALLOWED_EXTENSIONS=png,jpg,jpeg
