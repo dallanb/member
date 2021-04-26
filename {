@@ -63,4 +63,39 @@ bash: syntax error near unexpected token `color:'
 ]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$         }
 bash: syntax error near unexpected token `}'
 ]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ 
-]0;dallanbhatti@super: ~/Documents/Personal/techtapir/servic
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$         failure {
+failure: command not found
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$           slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+bash: syntax error near unexpected token `color:'
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$         }
+bash: syntax error near unexpected token `}'
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$     }
+bash: syntax error near unexpected token `}'
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ }
+bash: syntax error near unexpected token `}'
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ 
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ 
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ 
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ clear
+[3J[H[2J]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ git add . && git commit -m "update jenkinsfile recreate" && git push origin prod
+[prod 803fb1d] update jenkinsfile recreate
+ 1 file changed, 66 insertions(+)
+ create mode 100644 {
+
+Counting objects: 3, done.
+Delta compression using up to 16 threads.
+Compressing objects:  33% (1/3)   Compressing objects:  66% (2/3)   Compressing objects: 100% (3/3)   Compressing objects: 100% (3/3), done.
+Writing objects:  33% (1/3)   Writing objects:  66% (2/3)   Writing objects: 100% (3/3)   Writing objects: 100% (3/3), 1.03 KiB | 1.03 MiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas:   0% (0/1)[Kremote: Resolving deltas: 100% (1/1)[Kremote: Resolving deltas: 100% (1/1), completed with 1 local object.[K
+To github.com:dallanb/member.git
+   8b0fe51..803fb1d  prod -> prod
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ 
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ git add . && git commit -m "update jenkinsfile recreate" && git push origin prod
+On branch prod
+Your branch is up to date with 'origin/prod'.
+
+nothing to commit, working tree clean
+]0;dallanbhatti@super: ~/Documents/Personal/techtapir/services/member[01;32mdallanbhatti@super[00m:[01;34m~/Documents/Personal/techtapir/services/member[00m$ exit
+
+Script done on 2021-04-20 14:04:58-0700
