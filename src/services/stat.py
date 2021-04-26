@@ -2,7 +2,7 @@ import logging
 from http import HTTPStatus
 
 from .base import Base
-from ..decorators import stat_notification
+from ..decorators.notifications import stat_notification
 from ..models import Stat as StatModel, Member as MemberModel
 
 

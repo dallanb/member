@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from .base import Base
 from .wallet_transaction import WalletTransaction as WalletTransactionService
-from ..decorators import wallet_notification
+from ..decorators.notifications import wallet_notification
 from ..models import Wallet as WalletModel
 
 
