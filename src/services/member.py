@@ -4,7 +4,7 @@ from http import HTTPStatus
 from sqlalchemy.orm import aliased
 
 from .base import Base
-from ..decorators import member_notification
+from ..decorators.notifications import member_notification
 from ..external import Account as AccountExternal, League as LeagueExternal, Contest as ContestExternal, \
     Wager as WagerExternal
 from ..models import Member as MemberModel, Stat as StatModel

@@ -4,7 +4,7 @@ from http import HTTPStatus
 from .base import Base
 from .. import app
 from ..common.utils import s3_object_name, get_image_data
-from ..decorators import avatar_notification
+from ..decorators.notifications import avatar_notification
 from ..libs import S3
 from ..models import Avatar as AvatarModel
 

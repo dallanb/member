@@ -5,14 +5,14 @@ from tests.helpers import avatar_notification_create, avatar_notification_update
 
 @pytest.fixture
 def mock_avatar_notification_create(mocker):
-    yield mocker.patch('src.decorators.avatar_notification.create', avatar_notification_create)
+    yield mocker.patch('src.decorators.notifications.avatar_notification.create', avatar_notification_create)
 
 
 @pytest.fixture
 def mock_avatar_notification_update(mocker):
-    yield mocker.patch('src.decorators.avatar_notification.update', avatar_notification_update)
+    yield mocker.patch('src.decorators.notifications.avatar_notification.update', avatar_notification_update)
 
 
 @pytest.fixture
 def mock_avatar_notification_delete(mocker):
-    yield mocker.patch('src.decorators.avatar_notification.delete', avatar_notification_delete)
+    yield mocker.patch('src.decorators.notifications.avatar_notification.delete', avatar_notification_delete)
