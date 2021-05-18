@@ -53,6 +53,7 @@ class MembersUserAPI(Base):
     @marshal_with(DataResponse.marshallable())
     @assign_user
     def get(self, user_uuid):
+        self.logger.info(user_uuid)
         data = self.clean(schema=fetch_member_user_schema, instance={**request.args,
                                                                      'user_uuid': user_uuid})  # not cleaning user_uuid at base request level so make sure it is cleaned here
         members = self.member.find(**data)
