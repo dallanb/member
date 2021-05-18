@@ -153,7 +153,7 @@ def test_avatar_create_w_bad_field(reset_db, pause_notification, seed_member):
 
 
 ###########
-# Destroy
+# Delete
 ###########
 def test_avatar_delete(reset_db, pause_notification, seed_member, seed_avatar):
     """
